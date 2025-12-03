@@ -1,0 +1,54 @@
+.fieldLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.requiredIndicator {
+  color: var(--input-error-color);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all var(--transition-base);
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-border-active);
+  }
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all var(--transition-base);
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-border-active);
+  }
+}
+
+.optionsGroup {
+  margin-bottom: 0.75rem;
+}
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+

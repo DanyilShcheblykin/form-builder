@@ -1,0 +1,56 @@
+.stepItem {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-border);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+
+  &:hover {
+    border-color: var(--color-border-hover);
+  }
+
+  &.selected {
+    border-color: var(--color-primary);
+    background-color: var(--color-surface-elevated);
+  }
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.stepTitleInput {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  transition: all var(--transition-base);
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-border-active);
+  }
+}
+
+.stepActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.deleteStepButton {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+}
+

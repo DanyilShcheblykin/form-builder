@@ -1,0 +1,44 @@
+.container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.headerActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+}
+
+.sidebar {
+  background-color: var(--color-surface);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  height: fit-content;
+}
+
+.mainContent {
+  background-color: var(--color-surface);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+}
+

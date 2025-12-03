@@ -1,0 +1,57 @@
+.fieldItem {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-border);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+
+  &.selected {
+    border-color: var(--color-primary);
+    background-color: var(--color-surface-elevated);
+  }
+}
+
+.fieldItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.fieldActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-base);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-border-hover);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.deleteButton {
+  border-color: var(--input-error-border-color);
+  background-color: transparent;
+  color: var(--input-error-color);
+
+  &:hover {
+    border-color: var(--input-error-border-color);
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+}
+

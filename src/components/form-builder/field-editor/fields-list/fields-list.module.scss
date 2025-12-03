@@ -1,0 +1,13 @@
+.fieldsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-secondary);
+}
+
