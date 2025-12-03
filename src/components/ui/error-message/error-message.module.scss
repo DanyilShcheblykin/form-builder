@@ -1,0 +1,16 @@
+.error {
+  position: absolute;
+  color: var(--input-error-color);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  bottom: -1rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: help;
+  font-weight: 500;
+  text-shadow: 0 0 4px rgba(239, 68, 68, 0.3);
+}
+

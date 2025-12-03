@@ -1,0 +1,83 @@
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.75rem;
+}
+
+.progressHeader {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  font-weight: 700;
+  gap: 0.5rem;
+  color: var(--color-text);
+}
+
+.progressHeaderLeft {
+  display: grid;
+  justify-self: start;
+  align-self: center;
+}
+
+.counter {
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.progressCurrent,
+.progressSlash,
+.progressTotal {
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.progressCurrent {
+  color: var(--color-primary);
+}
+
+.barIndicator {
+  width: 100%;
+  height: 1rem;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  display: block;
+  border-radius: 9999px;
+  &::-webkit-meter-bar {
+    background: transparent;
+    border-radius: 9999px;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+  }
+
+  &::-webkit-meter-optimum-value,
+  &::-webkit-meter-suboptimum-value,
+  &::-webkit-meter-even-less-good-value {
+    background: var(--color-primary);
+    border-radius: 9999px;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &::-moz-meter-bar {
+    background: var(--color-primary);
+    border-radius: 9999px;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @supports (-moz-appearance: none) {
+    & {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      position: relative;
+    }
+  }
+}
+
