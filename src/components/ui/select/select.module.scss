@@ -1,0 +1,27 @@
+.selectWrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.labelContent {
+  display: flex;
+  font-size: var(--label-font-size);
+}
+
+.fakeInput {
+  display: flex;
+  width: 100%;
+  border: 0.0625rem solid var(--input-border);
+  outline: none;
+  border-radius: 8.25rem;
+  min-height: var(--input-height);
+  transition: all 0.3s ease;
+  background-color: var(--input-background);
+  font-size: var(--input-font-size);
+  color: var(--color-text);
+}
+
+

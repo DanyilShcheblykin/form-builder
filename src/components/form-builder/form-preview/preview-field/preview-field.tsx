@@ -6,6 +6,7 @@ import Input from '../../../ui/input/input'
 import { Checkbox } from '../../../ui/checkbox/checkbox'
 import { Radio } from '../../../ui/radio/radio'
 import styles from './preview-field.module.scss'
+import Select from '@/components/ui/select/select'
 
 interface PreviewFieldProps {
   field: FormField
@@ -109,28 +110,27 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
       )
 
     case 'select':
+      const selectOptions = field.options?.map((option: string) => ({ label: option, value: option })) || []
+      const selectedOption = value ? selectOptions.find((opt) => opt.value === value) : null
+      
       return (
-        <div key={field.id}>
-          <label className={styles.fieldLabel}>
-            <Text size={3} bold>
-              {field.label}
-              {field.required && <span className={styles.requiredIndicator}> *</span>}
-            </Text>
-          </label>
-          <select
-            value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
-            required={field.required}
+        <>
+          <Text size={3} bold>
+            {field.label}
+            {field.required && <span className={styles.requiredIndicator}> *</span>}
+          </Text>
+          <Select
+            label={field.label}
+            onChange={(selectedOption: any) => {
+              onChange(selectedOption ? selectedOption.value : null)
+            }}
             className={styles.select}
-          >
-            <option value="">Select an option</option>
-            {field.options?.map((option: string, index: number) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+            options={selectOptions}
+            value={selectedOption}
+            placeholder="Select an option"
+            {...({ required: field.required } as any)}
+          />
+        </>
       )
 
     default:
