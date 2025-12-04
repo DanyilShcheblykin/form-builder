@@ -1,0 +1,22 @@
+.deleteModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.deleteModalActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.deleteButton {
+  background-color: var(--input-error-color) !important;
+  border-color: var(--input-error-color) !important;
+
+  &:hover {
+    background-color: var(--input-error-color) !important;
+    opacity: 0.9;
+  }
+}

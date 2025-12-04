@@ -1,4 +1,4 @@
-.main {
+.containerBlock {
   margin-top: 20px;
 }
 
@@ -31,6 +31,8 @@
 .formCardHeader {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
   align-items: flex-start;
   margin-bottom: 1rem;
 }

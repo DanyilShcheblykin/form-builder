@@ -265,7 +265,7 @@ export const Loading: React.FC<LoadingProps> = ({
   }
 
   const content = (
-    <div className={classNames(styles.container, className)}>
+    <div className={classNames(styles.containerBlock, className)}>
       {renderLoader()}
       {text && (
         <p className={classNames(styles.text, textSizeClassMap[size])}>

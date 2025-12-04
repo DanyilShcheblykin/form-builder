@@ -2,18 +2,22 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Heading } from '../../typography/heading/heading'
-import { Text } from '../../typography/text/text'
-import ButtonFilled from '../../ui/button/button-filled'
-import { SavedForm } from '../../../types/database'
+import { Heading } from '@/components/typography/heading/heading'
+import { Text } from '@/components/typography/text/text'
+import ButtonFilled from '@/components/ui/button/button-filled'
+import { SavedForm } from '@/types/database'
 import styles from './forms.module.scss'
 import LoadingPage from '@/components/shared/loading-page/loading-page'
+import { customToast } from '@/components/shared/custom-toast/custom-toast'
+import RemoveFormModal from './remove-form-modal/remove-form-modal'
 
 export default function FormsPageComponent() {
   const router = useRouter()
   const [forms, setForms] = useState<SavedForm[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [formIdToDelete, setFormIdToDelete] = useState<string | null>(null)
 
   useEffect(() => {
     fetchForms()
@@ -37,13 +41,16 @@ export default function FormsPageComponent() {
     }
   }
 
-  const handleDelete = async (formId: string) => {
-    if (!confirm('Are you sure you want to delete this form?')) {
-      return
-    }
+  const handleDeleteClick = (formId: string) => {
+    setFormIdToDelete(formId)
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!formIdToDelete) return
 
     try {
-      const response = await fetch(`/api/forms/${formId}`, {
+      const response = await fetch(`/api/forms/${formIdToDelete}`, {
         method: 'DELETE',
       })
 
@@ -51,11 +58,19 @@ export default function FormsPageComponent() {
         throw new Error('Failed to delete form')
       }
 
-      setForms(forms.filter((form) => form.id !== formId))
+      setForms(forms.filter((form) => form.id !== formIdToDelete))
+      setIsDeleteModalOpen(false)
+      setFormIdToDelete(null)
+      customToast('Form deleted successfully', 'success')
     } catch (err) {
       console.error('Error deleting form:', err)
-      alert('Failed to delete form')
+      customToast('Failed to delete form', 'error')
     }
+  }
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false)
+    setFormIdToDelete(null)
   }
 
   const formatDate = (dateString: string) => {
@@ -71,13 +86,13 @@ export default function FormsPageComponent() {
   if (isLoading) return <LoadingPage text="Loading forms..." />
 
   return (
-    <main className={styles.main}>
+    <main className={styles.containerBlock}>
       <div className='container'>
         <div className={styles.header}>
           <Heading level={1} size={1}>
             My Forms:
           </Heading>
-          <ButtonFilled onClick={() => router.push('/create')}>
+          <ButtonFilled onClick={() => router.push('/forms/create')}>
             Create Form
           </ButtonFilled>
         </div>
@@ -111,7 +126,7 @@ export default function FormsPageComponent() {
                       View
                     </ButtonFilled>
                     <ButtonFilled
-                      onClick={() => handleDelete(form.id)}
+                      onClick={() => handleDeleteClick(form.id)}
                       color="secondary"
                       className={styles.deleteButton}
                     >
@@ -137,6 +152,15 @@ export default function FormsPageComponent() {
           </div>
         )}
       </div>
+
+      {isDeleteModalOpen && (
+        <RemoveFormModal
+          isOpenModal={isDeleteModalOpen}
+          setIsOpenModal={setIsDeleteModalOpen}
+          handleDeleteConfirm={handleDeleteConfirm}
+          handleDeleteCancel={handleDeleteCancel}
+        />
+      )}
     </main>
   )
 }
