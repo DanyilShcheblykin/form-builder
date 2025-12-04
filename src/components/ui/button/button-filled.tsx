@@ -61,6 +61,8 @@ const ButtonFilled: React.FC<IProps> = (props) => {
     [onClick]
   )
 
+  const showLoader = isLoadingInner || isLoading
+
   return (
     <ButtonRaw
       className={classNames(buttonColorClass, styles.button, className)}
@@ -70,13 +72,17 @@ const ButtonFilled: React.FC<IProps> = (props) => {
       ref={ref}
       {...rest}
     >
-      {!isLoadingInner && !isLoading && children}
+      <span className={classNames(showLoader && styles.hiddenText)}>
+        {children}
+      </span>
 
-      {(isLoadingInner || isLoading) && (
-        <div className={styles.dorsWrapper}>
-          <div className={styles.loaderDot} />
-          <div className={styles.loaderDot} />
-          <div className={styles.loaderDot} />
+      {showLoader && (
+        <div className={styles.loaderWrapper}>
+          <div className={styles.dorsWrapper}>
+            <div className={styles.loaderDot} />
+            <div className={styles.loaderDot} />
+            <div className={styles.loaderDot} />
+          </div>
         </div>
       )}
     </ButtonRaw>
