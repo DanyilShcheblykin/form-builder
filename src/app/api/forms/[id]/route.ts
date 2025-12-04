@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { neon } from '@neondatabase/serverless'
-import { SavedForm } from '@/types/database'
-
-const sql = neon(process.env.DATABASE_URL!)
+import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: NextRequest,
@@ -11,11 +8,11 @@ export async function GET(
   try {
     const { id } = params
 
-    const result = await sql`
-      SELECT * FROM forms WHERE id = ${id}
-    ` as SavedForm[]
+    const form = await prisma.form.findUnique({
+      where: { id },
+    })
 
-    if (result.length === 0) {
+    if (!form) {
       return NextResponse.json(
         {
           success: false,
@@ -28,7 +25,7 @@ export async function GET(
     return NextResponse.json(
       {
         success: true,
-        data: result[0],
+        data: form,
       },
       { status: 200 }
     )
@@ -54,32 +51,26 @@ export async function PUT(
     const body = await request.json()
     const { name, description, form_data } = body
 
-    let result
-    if (form_data) {
-      const formDataJson = JSON.stringify(form_data)
-      result = await sql`
-        UPDATE forms 
-        SET 
-          name = ${name || null},
-          description = ${description || null},
-          form_data = ${formDataJson}::jsonb,
-          updated_at = CURRENT_TIMESTAMP
-        WHERE id = ${id}
-        RETURNING *
-      `
-    } else {
-      result = await sql`
-        UPDATE forms 
-        SET 
-          name = ${name || null},
-          description = ${description || null},
-          updated_at = CURRENT_TIMESTAMP
-        WHERE id = ${id}
-        RETURNING *
-      `
-    }
+    const updateData: any = {}
+    if (name !== undefined) updateData.name = name
+    if (description !== undefined) updateData.description = description || null
+    if (form_data !== undefined) updateData.form_data = form_data
 
-    if (result.length === 0) {
+    const form = await prisma.form.update({
+      where: { id },
+      data: updateData,
+    })
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: form,
+        message: 'Form updated successfully',
+      },
+      { status: 200 }
+    )
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('Record to update does not exist')) {
       return NextResponse.json(
         {
           success: false,
@@ -89,15 +80,6 @@ export async function PUT(
       )
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        data: result[0],
-        message: 'Form updated successfully',
-      },
-      { status: 200 }
-    )
-  } catch (error) {
     console.error('Error updating form:', error)
     return NextResponse.json(
       {
@@ -117,19 +99,9 @@ export async function DELETE(
   try {
     const { id } = params
 
-    const result = await sql`
-      DELETE FROM forms WHERE id = ${id} RETURNING id
-    `
-
-    if (result.length === 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Form not found',
-        },
-        { status: 404 }
-      )
-    }
+    await prisma.form.delete({
+      where: { id },
+    })
 
     return NextResponse.json(
       {
@@ -139,6 +111,16 @@ export async function DELETE(
       { status: 200 }
     )
   } catch (error) {
+    if (error instanceof Error && error.message.includes('Record to delete does not exist')) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Form not found',
+        },
+        { status: 404 }
+      )
+    }
+
     console.error('Error deleting form:', error)
     return NextResponse.json(
       {

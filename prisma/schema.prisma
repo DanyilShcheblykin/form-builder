@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Form {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  form_data   Json
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  
+  submissions FormSubmission[]
+
+  @@map("forms")
+}
+
+model FormSubmission {
+  id             String   @id @default(cuid())
+  form_id        String
+  submission_data Json
+  submitted_at   DateTime @default(now())
+  
+  form Form @relation(fields: [form_id], references: [id], onDelete: Cascade)
+
+  @@map("form_submissions")
+}
+

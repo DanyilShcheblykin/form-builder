@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { neon } from '@neondatabase/serverless'
-import { FormSubmission } from '@/types/database'
-
-const sql = neon(process.env.DATABASE_URL!)
+import { prisma } from '@/lib/prisma'
 
 export async function POST(
   request: NextRequest,
@@ -24,11 +21,11 @@ export async function POST(
     }
 
     // Verify form exists
-    const formCheck = await sql`
-      SELECT id FROM forms WHERE id = ${formId}
-    `
+    const form = await prisma.form.findUnique({
+      where: { id: formId },
+    })
 
-    if (formCheck.length === 0) {
+    if (!form) {
       return NextResponse.json(
         {
           success: false,
@@ -38,19 +35,17 @@ export async function POST(
       )
     }
 
-    const submissionId = `submission-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-
-    const submissionDataJson = JSON.stringify(submission_data)
-    const result = await sql`
-      INSERT INTO form_submissions (id, form_id, submission_data, submitted_at)
-      VALUES (${submissionId}, ${formId}, ${submissionDataJson}::jsonb, CURRENT_TIMESTAMP)
-      RETURNING *
-    `
+    const submission = await prisma.formSubmission.create({
+      data: {
+        form_id: formId,
+        submission_data: submission_data as any,
+      },
+    })
 
     return NextResponse.json(
       {
         success: true,
-        data: result[0],
+        data: submission,
         message: 'Form submission saved successfully',
       },
       { status: 201 }
@@ -75,11 +70,14 @@ export async function GET(
   try {
     const { id: formId } = params
 
-    const submissions = await sql`
-      SELECT * FROM form_submissions 
-      WHERE form_id = ${formId}
-      ORDER BY submitted_at DESC
-    ` as FormSubmission[]
+    const submissions = await prisma.formSubmission.findMany({
+      where: {
+        form_id: formId,
+      },
+      orderBy: {
+        submitted_at: 'desc',
+      },
+    })
 
     return NextResponse.json(
       {

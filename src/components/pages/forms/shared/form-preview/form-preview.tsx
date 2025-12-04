@@ -8,7 +8,7 @@ import * as LucideIcons from 'lucide-react'
 import PreviewField from './preview-field/preview-field'
 import FormActions from './form-actions/form-actions'
 import styles from './form-preview.module.scss'
-import { useFormBuilder } from '../context/form-builder-context'
+import { useFormBuilder } from '../../create/form-builder/context/form-builder-context'
 
 export default function FormPreview(): JSX.Element {
   const { formData, savedFormId, formName, setSavedFormId } = useFormBuilder()
