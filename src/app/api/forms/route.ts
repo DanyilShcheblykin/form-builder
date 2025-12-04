@@ -1,76 +1,38 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { FormBuilderData } from '@/types/form-builder'
-import { prisma } from '@/lib/prisma'
+import { NextRequest } from 'next/server'
+import { successResponse, badRequestResponse } from '@/lib/api/response'
+import { handleApiError } from '@/lib/api/error-handler'
+import { formService } from '@/lib/services/form-service'
+import { formValidator } from '@/lib/validators'
 
 export async function GET() {
   try {
-    const forms = await prisma.form.findMany({
-      orderBy: {
-        created_at: 'desc',
-      },
-    })
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: forms,
-      },
-      { status: 200 }
-    )
+    const forms = await formService.getAll()
+    return successResponse(forms)
   } catch (error) {
-    console.error('Error fetching forms:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Failed to fetch forms',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    )
+    return handleApiError(error, 'fetch forms')
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, description, form_data }: { name: string; description?: string; form_data: FormBuilderData } = body
 
-    if (!name || !form_data) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Name and form_data are required',
-        },
-        { status: 400 }
-      )
+    const validation = formValidator.validateCreate(body)
+    if (!validation.valid) {
+      return badRequestResponse(validation.errors.join(', '))
     }
 
-    const form = await prisma.form.create({
-      data: {
-        name,
-        description: description || null,
-        form_data: form_data as any,
-      },
+    const { name, description, form_data } = validation.data!
+
+    const form = await formService.create({
+      name,
+      description,
+      form_data,
     })
 
-    return NextResponse.json(
-      {
-        success: true,
-        data: form,
-        message: 'Form saved successfully',
-      },
-      { status: 201 }
-    )
+    return successResponse(form, 'Form saved successfully', 201)
   } catch (error) {
-    console.error('Error saving form:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Failed to save form',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    )
+    return handleApiError(error, 'save form')
   }
 }
 

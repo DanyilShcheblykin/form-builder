@@ -7,18 +7,22 @@ import { ProgressBar } from '@/components/ui/progress-bar/progress-bar'
 import * as LucideIcons from 'lucide-react'
 import PreviewField from './preview-field/preview-field'
 import FormActions from './form-actions/form-actions'
+import ButtonFilled from '@/components/ui/button/button-filled'
 import styles from './form-preview.module.scss'
 import { useFormBuilder } from '../../create/form-builder/context/form-builder-context'
+import { customToast } from '@/components/shared/custom-toast/custom-toast'
 
 export default function FormPreview(): JSX.Element {
-  const { formData, savedFormId, formName, setSavedFormId } = useFormBuilder()
+  const { formData, savedFormId, formName, setSavedFormId, saveForm, isSaving } = useFormBuilder()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [formValues, setFormValues] = useState<Record<string, any>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitMessage, setSubmitMessage] = useState<string | null>(null)
 
   const currentStep = formData.steps[currentStepIndex]
   const totalSteps = formData.steps.length
+  
+  // If form is not saved yet, it's preview mode - disable fields
+  const isPreviewMode = !savedFormId
 
   const getIcon = (iconName: string) => {
     const IconComponent = (LucideIcons as any)[iconName] as React.ComponentType<{ size?: number }>
@@ -41,9 +45,22 @@ export default function FormPreview(): JSX.Element {
     }
   }
 
+  const handleSaveForm = async () => {
+    try {
+      await saveForm()
+    } catch (error) {
+      console.error('Error saving form:', error)
+    }
+  }
+
   const handleSubmit = async () => {
+    // If form is not saved yet (preview mode), show info toast
+    if (isPreviewMode) {
+      customToast('When you create this form, the form will be submitted', 'info')
+      return
+    }
+
     setIsSubmitting(true)
-    setSubmitMessage(null)
 
     try {
       let currentFormId = savedFormId
@@ -85,12 +102,12 @@ export default function FormPreview(): JSX.Element {
         throw new Error('Failed to submit form')
       }
 
-      setSubmitMessage('Form submitted successfully!')
+      customToast('Form submitted successfully!', 'success')
       setFormValues({}) // Clear form values
       setCurrentStepIndex(0) // Reset to first step
     } catch (error) {
       console.error('Error submitting form:', error)
-      setSubmitMessage('Failed to submit form. Please try again.')
+      customToast('Failed to submit form. Please try again.', 'error')
     } finally {
       setIsSubmitting(false)
     }
@@ -129,17 +146,10 @@ export default function FormPreview(): JSX.Element {
               field={field}
               value={formValues[field.id]}
               onChange={(value) => updateFieldValue(field.id, value)}
+              disabled={isPreviewMode}
             />
           ))}
         </div>
-
-        {submitMessage && (
-          <div className={styles.submitMessage}>
-            <Text size={3} color={submitMessage.includes('success') ? 'default' : 'secondary'}>
-              {submitMessage}
-            </Text>
-          </div>
-        )}
 
         <FormActions
           currentStepIndex={currentStepIndex}
@@ -150,6 +160,14 @@ export default function FormPreview(): JSX.Element {
           isSubmitting={isSubmitting}
         />
       </div>
+
+      {isPreviewMode && (
+        <div className={styles.saveFormContainer}>
+          <ButtonFilled onClick={handleSaveForm} disabled={isSaving} isLoading={isSaving}>
+            Save Form
+          </ButtonFilled>
+        </div>
+      )}
     </div>
   )
 }

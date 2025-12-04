@@ -30,7 +30,7 @@ interface FormBuilderContextType {
   updateField: (stepId: string, fieldId: string, updates: Partial<FormField>) => void
   deleteField: (stepId: string, fieldId: string) => void
   moveField: (stepId: string, fieldId: string, direction: 'up' | 'down') => void
-  saveForm: () => Promise<void>
+  saveForm: (clearAfterSave?: boolean) => Promise<void>
   setSavedFormId: (formId: string | null) => void
 }
 
@@ -159,7 +159,16 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
     })
   }
 
-  const saveForm = async () => {
+  const resetForm = () => {
+    setFormData({ steps: [] })
+    setFormName('')
+    setSelectedStepId(null)
+    setSelectedFieldId(null)
+    setSavedFormId(null)
+    setShowPreview(false)
+  }
+
+  const saveForm = async (clearAfterSave: boolean = false) => {
     if (formData.steps.length === 0) {
       customToast('Please add at least one step to save the form', 'error')
       return
@@ -174,6 +183,7 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
     try {
       const url = savedFormId ? `/api/forms/${savedFormId}` : '/api/forms'
       const method = savedFormId ? 'PUT' : 'POST'
+      const isNewForm = !savedFormId
 
       const response = await fetch(url, {
         method,
@@ -193,6 +203,11 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
       const data = await response.json()
       setSavedFormId(data.data.id)
       customToast('Form saved successfully!', 'success')
+
+      // Clear form data after saving new form from main page (not in preview mode)
+      if (clearAfterSave && isNewForm) {
+        resetForm()
+      }
     } catch (error) {
       console.error('Error saving form:', error)
       customToast('Failed to save form. Please try again.', 'error')

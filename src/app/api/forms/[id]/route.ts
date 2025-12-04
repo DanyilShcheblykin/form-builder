@@ -1,5 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { NextRequest } from 'next/server'
+import { successResponse, notFoundResponse, badRequestResponse } from '@/lib/api/response'
+import { handleApiError } from '@/lib/api/error-handler'
+import { formService } from '@/lib/services/form-service'
+import { formValidator } from '@/lib/validators'
 
 export async function GET(
   request: NextRequest,
@@ -7,38 +10,15 @@ export async function GET(
 ) {
   try {
     const { id } = params
-
-    const form = await prisma.form.findUnique({
-      where: { id },
-    })
+    const form = await formService.getById(id)
 
     if (!form) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Form not found',
-        },
-        { status: 404 }
-      )
+      return notFoundResponse('Form not found')
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        data: form,
-      },
-      { status: 200 }
-    )
+    return successResponse(form)
   } catch (error) {
-    console.error('Error fetching form:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Failed to fetch form',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    )
+    return handleApiError(error, 'fetch form')
   }
 }
 
@@ -49,46 +29,24 @@ export async function PUT(
   try {
     const { id } = params
     const body = await request.json()
-    const { name, description, form_data } = body
 
-    const updateData: any = {}
-    if (name !== undefined) updateData.name = name
-    if (description !== undefined) updateData.description = description || null
-    if (form_data !== undefined) updateData.form_data = form_data
-
-    const form = await prisma.form.update({
-      where: { id },
-      data: updateData,
-    })
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: form,
-        message: 'Form updated successfully',
-      },
-      { status: 200 }
-    )
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('Record to update does not exist')) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Form not found',
-        },
-        { status: 404 }
-      )
+    const formExists = await formService.exists(id)
+    if (!formExists) {
+      return notFoundResponse('Form not found')
     }
 
-    console.error('Error updating form:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Failed to update form',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    )
+    const validation = formValidator.validateUpdate(body)
+    if (!validation.valid) {
+      return badRequestResponse(validation.errors.join(', '))
+    }
+
+    const { name, description, form_data } = validation.data!
+
+    const form = await formService.update(id, { name, description, form_data })
+
+    return successResponse(form, 'Form updated successfully')
+  } catch (error) {
+    return handleApiError(error, 'update form')
   }
 }
 
@@ -99,37 +57,15 @@ export async function DELETE(
   try {
     const { id } = params
 
-    await prisma.form.delete({
-      where: { id },
-    })
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'Form deleted successfully',
-      },
-      { status: 200 }
-    )
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('Record to delete does not exist')) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Form not found',
-        },
-        { status: 404 }
-      )
+    const formExists = await formService.exists(id)
+    if (!formExists) {
+      return notFoundResponse('Form not found')
     }
 
-    console.error('Error deleting form:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Failed to delete form',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    )
+    await formService.delete(id)
+
+    return successResponse(null, 'Form deleted successfully')
+  } catch (error) {
+    return handleApiError(error, 'delete form')
   }
 }
-

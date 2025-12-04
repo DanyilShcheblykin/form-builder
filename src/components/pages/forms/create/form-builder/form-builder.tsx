@@ -40,7 +40,11 @@ function FormBuilderContent() {
                 onChange={(e) => setFormName(e.target.value)}
                 className={styles.formNameInput}
               />
-              <ButtonFilled onClick={saveForm} disabled={isSaving} isLoading={isSaving}>
+              <ButtonFilled 
+                onClick={() => saveForm(true)} 
+                disabled={isSaving} 
+                isLoading={isSaving}
+              >
                 {savedFormId ? 'Update Form' : 'Save Form'}
               </ButtonFilled>
             </>

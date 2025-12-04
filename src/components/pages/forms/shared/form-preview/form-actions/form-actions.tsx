@@ -10,6 +10,7 @@ interface FormActionsProps {
   onNext: () => void
   onSubmit: () => void
   isSubmitting?: boolean
+  showSubmit?: boolean // If false, hide Submit button (for preview mode)
 }
 
 export default function FormActions({
@@ -19,6 +20,7 @@ export default function FormActions({
   onNext,
   onSubmit,
   isSubmitting = false,
+  showSubmit = true,
 }: FormActionsProps) {
   return (
     <div className={styles.formActions}>
@@ -34,9 +36,11 @@ export default function FormActions({
           Next
         </ButtonFilled>
       ) : (
-        <ButtonFilled onClick={onSubmit} disabled={isSubmitting} isLoading={isSubmitting}>
-          Submit
-        </ButtonFilled>
+        showSubmit && (
+          <ButtonFilled onClick={onSubmit} disabled={isSubmitting} isLoading={isSubmitting}>
+            Submit
+          </ButtonFilled>
+        )
       )}
     </div>
   )

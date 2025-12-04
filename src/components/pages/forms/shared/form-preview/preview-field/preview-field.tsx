@@ -12,9 +12,10 @@ interface PreviewFieldProps {
   field: FormField
   value: any
   onChange: (value: any) => void
+  disabled?: boolean
 }
 
-export default function PreviewField({ field, value, onChange }: PreviewFieldProps) {
+export default function PreviewField({ field, value, onChange, disabled = false }: PreviewFieldProps) {
   switch (field.type) {
     case 'input':
       return (
@@ -25,6 +26,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
           required={field.required}
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
         />
       )
 
@@ -42,6 +44,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
             onChange={(e) => onChange(e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
+            disabled={disabled}
             className={styles.textarea}
           />
         </div>
@@ -70,6 +73,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
                       : currentValues.filter((v: string) => v !== option)
                     onChange(newValues)
                   }}
+                  disabled={disabled}
                 />
               ))}
             </div>
@@ -82,6 +86,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
           label={field.label}
           checked={value || false}
           onChange={(e) => onChange(e.target.checked)}
+          disabled={disabled}
         />
       )
 
@@ -103,6 +108,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
                 value={option}
                 checked={value === option}
                 onChange={(e) => onChange(e.target.value)}
+                disabled={disabled}
               />
             ))}
           </div>
@@ -127,6 +133,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
             options={selectOptions}
             value={selectedOption}
             placeholder="Select an option"
+            isDisabled={disabled}
             {...({ required: field.required } as any)}
           />
         </>
