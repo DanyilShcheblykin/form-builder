@@ -7,7 +7,7 @@ import { Text } from '../../typography/text/text'
 import ButtonFilled from '../../ui/button/button-filled'
 import { SavedForm } from '../../../types/database'
 import styles from './forms.module.scss'
-import LoadingPage from '../../loading-page/loading-page'
+import LoadingPage from '@/components/shared/loading-page/loading-page'
 
 export default function FormsPageComponent() {
   const router = useRouter()

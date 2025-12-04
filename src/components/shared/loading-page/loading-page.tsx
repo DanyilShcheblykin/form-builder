@@ -1,4 +1,4 @@
-import { LoadingSpinner } from '../ui/loaders/loaders'
+import { LoadingSpinner } from '@/components/ui/loaders/loaders'
 import styles from './loading-page.module.scss'
 
 const LoadingPage = ({ text }: { text: string }) => {

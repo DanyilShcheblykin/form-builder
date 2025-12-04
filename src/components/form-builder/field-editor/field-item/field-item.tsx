@@ -1,34 +1,45 @@
 'use client'
 
-import { FormField } from '../../../../types/form-builder'
 import { Text } from '../../../typography/text/text'
 import classNames from 'classnames'
 import styles from './field-item.module.scss'
+import { useFormBuilder } from '../../context/form-builder-context'
 
 interface FieldItemProps {
-  field: FormField
+  stepId: string
+  fieldId: string
   index: number
-  isSelected: boolean
-  totalFields: number
-  onSelect: () => void
-  onMoveUp: () => void
-  onMoveDown: () => void
-  onDelete: () => void
 }
 
-export default function FieldItem({
-  field,
-  index,
-  isSelected,
-  totalFields,
-  onSelect,
-  onMoveUp,
-  onMoveDown,
-  onDelete,
-}: FieldItemProps) {
+export default function FieldItem({ stepId, fieldId, index }: FieldItemProps) {
+  const { selectedStep, selectedFieldId, setSelectedFieldId, moveField, deleteField } = useFormBuilder()
+  
+  if (!selectedStep || selectedStep.id !== stepId) return null
+  
+  const field = selectedStep.fields.find((f) => f.id === fieldId)
+  if (!field) return null
+  
+  const isSelected = selectedFieldId === field.id
+  const totalFields = selectedStep.fields.length
+  
+  const handleSelect = () => {
+    setSelectedFieldId(field.id)
+  }
+  
+  const handleMoveUp = () => {
+    moveField(stepId, fieldId, 'up')
+  }
+  
+  const handleMoveDown = () => {
+    moveField(stepId, fieldId, 'down')
+  }
+  
+  const handleDelete = () => {
+    deleteField(stepId, fieldId)
+  }
   return (
     <div
-      onClick={onSelect}
+      onClick={handleSelect}
       className={classNames(styles.fieldItem, {
         [styles.selected]: isSelected,
       })}
@@ -41,7 +52,7 @@ export default function FieldItem({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onMoveUp()
+              handleMoveUp()
             }}
             disabled={index === 0}
             className={styles.actionButton}
@@ -51,7 +62,7 @@ export default function FieldItem({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onMoveDown()
+              handleMoveDown()
             }}
             disabled={index === totalFields - 1}
             className={styles.actionButton}
@@ -61,7 +72,7 @@ export default function FieldItem({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onDelete()
+              handleDelete()
             }}
             className={classNames(styles.actionButton, styles.deleteButton)}
           >

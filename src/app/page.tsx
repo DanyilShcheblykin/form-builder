@@ -1,16 +1,16 @@
 'use client'
 
-import React from 'react';
-import ButtonFilled from '@/components/ui/button/button-filled';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
   const router = useRouter()
+  useEffect(() => {
+    router.push('/forms')
+  }, [])
+  
   return (
-    <main>
-      <ButtonFilled onClick={() => router.push('/forms')}>  Forms</ButtonFilled>
-      <ButtonFilled onClick={() => router.push('/forms')}>  Create Form </ButtonFilled>
-    </main>
+    <></>
   )
 }
 

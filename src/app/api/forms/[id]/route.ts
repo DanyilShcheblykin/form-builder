@@ -11,9 +11,9 @@ export async function GET(
   try {
     const { id } = params
 
-    const result = await sql<SavedForm>`
+    const result = await sql`
       SELECT * FROM forms WHERE id = ${id}
-    `
+    ` as SavedForm[]
 
     if (result.length === 0) {
       return NextResponse.json(

@@ -4,10 +4,7 @@ import { FieldType } from '../../../../types/form-builder'
 import { Text } from '../../../typography/text/text'
 import ButtonFilled from '../../../ui/button/button-filled'
 import styles from './add-field-section.module.scss'
-
-interface AddFieldSectionProps {
-  onAddField: (fieldType: FieldType) => void
-}
+import { useFormBuilder } from '../../context/form-builder-context'
 
 const fieldTypes: { type: FieldType; label: string }[] = [
   { type: 'input', label: 'Text Input' },
@@ -17,7 +14,16 @@ const fieldTypes: { type: FieldType; label: string }[] = [
   { type: 'select', label: 'Select Dropdown' },
 ]
 
-export default function AddFieldSection({ onAddField }: AddFieldSectionProps) {
+export default function AddFieldSection(): JSX.Element | null {
+  const { selectedStep, addField } = useFormBuilder()
+  
+  if (!selectedStep) {
+    return null
+  }
+  
+  const handleAddField = (fieldType: FieldType) => {
+    addField(selectedStep.id, fieldType)
+  }
   return (
     <div className={styles.addFieldSection}>
       <Text size={3} bold className={styles.addFieldLabel}>
@@ -27,7 +33,7 @@ export default function AddFieldSection({ onAddField }: AddFieldSectionProps) {
         {fieldTypes.map(({ type, label }) => (
           <ButtonFilled
             key={type}
-            onClick={() => onAddField(type)}
+            onClick={() => handleAddField(type)}
             color="secondary"
             className={styles.addFieldButton}
           >

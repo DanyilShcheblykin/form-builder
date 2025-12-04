@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { FormBuilderData } from '../../../types/form-builder'
 import { Heading } from '../../typography/heading/heading'
 import { Text } from '../../typography/text/text'
 import { ProgressBar } from '../../ui/progress-bar/progress-bar'
@@ -9,15 +8,10 @@ import * as LucideIcons from 'lucide-react'
 import PreviewField from './preview-field/preview-field'
 import FormActions from './form-actions/form-actions'
 import styles from './form-preview.module.scss'
+import { useFormBuilder } from '../context/form-builder-context'
 
-interface FormPreviewProps {
-  formData: FormBuilderData
-  formId?: string
-  formName?: string
-  onFormSaved?: (formId: string) => void
-}
-
-export default function FormPreview({ formData, formId, formName, onFormSaved }: FormPreviewProps) {
+export default function FormPreview(): JSX.Element {
+  const { formData, savedFormId, formName, setSavedFormId } = useFormBuilder()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [formValues, setFormValues] = useState<Record<string, any>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -52,7 +46,7 @@ export default function FormPreview({ formData, formId, formName, onFormSaved }:
     setSubmitMessage(null)
 
     try {
-      let currentFormId = formId
+      let currentFormId = savedFormId
 
       // If form doesn't have an ID, save it first
       if (!currentFormId) {
@@ -73,10 +67,7 @@ export default function FormPreview({ formData, formId, formName, onFormSaved }:
 
         const saveFormData = await saveFormResponse.json()
         currentFormId = saveFormData.data.id
-
-        if (onFormSaved) {
-          onFormSaved(currentFormId)
-        }
+        setSavedFormId(currentFormId)
       }
 
       // Submit form data

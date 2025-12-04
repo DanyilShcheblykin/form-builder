@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import FormPreview from '../../../components/form-builder/form-preview/form-preview'
+import { FormBuilderProvider } from '../../../components/form-builder/context/form-builder-context'
 import { SavedForm } from '../../../types/database'
 import { FormBuilderData } from '../../../types/form-builder'
 import { Heading } from '../../../components/typography/heading/heading'
 import { Text } from '../../../components/typography/text/text'
 import ButtonFilled from '../../../components/ui/button/button-filled'
 import styles from './form-view.module.scss'
-import LoadingPage from '@/components/loading-page/loading-page'
+import LoadingPage from '@/components/shared/loading-page/loading-page'
 
 export default function FormViewPage() {
   const router = useRouter()
@@ -83,11 +84,14 @@ export default function FormViewPage() {
             </ButtonFilled>
           </div>
 
-          <FormPreview
-            formData={form.form_data as FormBuilderData}
-            formId={form.id}
-            formName={form.name}
-          />
+          <FormBuilderProvider
+            initialData={form.form_data as FormBuilderData}
+            initialFormId={form.id}
+            initialFormName={form.name}
+            initialShowPreview={true}
+          >
+            <FormPreview />
+          </FormBuilderProvider>
         </div>
 
       </div>

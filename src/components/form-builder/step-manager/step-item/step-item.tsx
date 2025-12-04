@@ -1,30 +1,37 @@
 'use client'
 
-import { FormStep } from '../../../../types/form-builder'
 import { Text } from '../../../typography/text/text'
 import ButtonFilled from '../../../ui/button/button-filled'
 import * as LucideIcons from 'lucide-react'
 import IconSelector from '../icon-selector/icon-selector'
 import classNames from 'classnames'
 import styles from './step-item.module.scss'
+import { useFormBuilder } from '../../context/form-builder-context'
 
 interface StepItemProps {
-  step: FormStep
-  isSelected: boolean
-  canDelete: boolean
-  onSelect: () => void
-  onUpdate: (updates: Partial<FormStep>) => void
-  onDelete: () => void
+  stepId: string
 }
 
-export default function StepItem({
-  step,
-  isSelected,
-  canDelete,
-  onSelect,
-  onUpdate,
-  onDelete,
-}: StepItemProps) {
+export default function StepItem({ stepId }: StepItemProps) {
+  const { steps, selectedStepId, setSelectedStepId, updateStep, deleteStep } = useFormBuilder()
+  
+  const step = steps.find((s) => s.id === stepId)
+  if (!step) return null
+  
+  const isSelected = selectedStepId === step.id
+  const canDelete = steps.length > 1
+  
+  const handleSelect = () => {
+    setSelectedStepId(step.id)
+  }
+  
+  const handleUpdate = (updates: Partial<typeof step>) => {
+    updateStep(step.id, updates)
+  }
+  
+  const handleDelete = () => {
+    deleteStep(step.id)
+  }
   const getIcon = (iconName: string) => {
     const IconComponent = (LucideIcons as any)[iconName] as React.ComponentType<{ size?: number }>
     return IconComponent ? <IconComponent size={20} /> : <LucideIcons.FileText size={20} />
@@ -32,7 +39,7 @@ export default function StepItem({
 
   return (
     <div
-      onClick={onSelect}
+      onClick={handleSelect}
       className={classNames(styles.stepItem, {
         [styles.selected]: isSelected,
       })}
@@ -51,7 +58,7 @@ export default function StepItem({
       <input
         type="text"
         value={step.title}
-        onChange={(e) => onUpdate({ title: e.target.value })}
+        onChange={(e) => handleUpdate({ title: e.target.value })}
         onClick={(e) => e.stopPropagation()}
         className={styles.stepTitleInput}
         placeholder="Step title"
@@ -59,13 +66,13 @@ export default function StepItem({
       <div className={styles.stepActions}>
         <IconSelector
           currentIcon={step.icon}
-          onSelectIcon={(icon) => onUpdate({ icon })}
+          onSelectIcon={(icon) => handleUpdate({ icon })}
         />
         {canDelete && (
           <ButtonFilled
             onClick={(e) => {
               e.stopPropagation()
-              onDelete()
+              handleDelete()
             }}
             color="secondary"
             className={styles.deleteStepButton}
