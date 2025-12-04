@@ -1,0 +1,73 @@
+.main {
+  margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.formsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.formCard {
+  background-color: var(--color-surface);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-base);
+
+  &:hover {
+    border-color: var(--color-border-hover);
+    box-shadow: var(--card-shadow);
+  }
+}
+
+.formCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.formCardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.formCardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+}
+
+.description {
+  margin-top: 0.5rem;
+}
+
+.retryButton,
+.createButton {
+  margin-top: 1rem;
+}
+
+.deleteButton {
+  background-color: var(--input-error-color) !important;
+  border-color: var(--input-error-color) !important;
+
+  &:hover {
+    background-color: var(--input-error-color) !important;
+    opacity: 0.9;
+  }
+}

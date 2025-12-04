@@ -12,11 +12,16 @@ import styles from './form-preview.module.scss'
 
 interface FormPreviewProps {
   formData: FormBuilderData
+  formId?: string
+  formName?: string
+  onFormSaved?: (formId: string) => void
 }
 
-export default function FormPreview({ formData }: FormPreviewProps) {
+export default function FormPreview({ formData, formId, formName, onFormSaved }: FormPreviewProps) {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [formValues, setFormValues] = useState<Record<string, any>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null)
 
   const currentStep = formData.steps[currentStepIndex]
   const totalSteps = formData.steps.length
@@ -42,9 +47,62 @@ export default function FormPreview({ formData }: FormPreviewProps) {
     }
   }
 
-  const handleSubmit = () => {
-    console.log('Form submitted:', formValues)
-    alert('Form submitted! Check console for values.')
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    setSubmitMessage(null)
+
+    try {
+      let currentFormId = formId
+
+      // If form doesn't have an ID, save it first
+      if (!currentFormId) {
+        const saveFormResponse = await fetch('/api/forms', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formName || `Form ${new Date().toLocaleDateString()}`,
+            form_data: formData,
+          }),
+        })
+
+        if (!saveFormResponse.ok) {
+          throw new Error('Failed to save form')
+        }
+
+        const saveFormData = await saveFormResponse.json()
+        currentFormId = saveFormData.data.id
+
+        if (onFormSaved) {
+          onFormSaved(currentFormId)
+        }
+      }
+
+      // Submit form data
+      const submitResponse = await fetch(`/api/forms/${currentFormId}/submissions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          submission_data: formValues,
+        }),
+      })
+
+      if (!submitResponse.ok) {
+        throw new Error('Failed to submit form')
+      }
+
+      setSubmitMessage('Form submitted successfully!')
+      setFormValues({}) // Clear form values
+      setCurrentStepIndex(0) // Reset to first step
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setSubmitMessage('Failed to submit form. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (totalSteps === 0) {
@@ -58,7 +116,7 @@ export default function FormPreview({ formData }: FormPreviewProps) {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.mainContainer}>
       <ProgressBar
         current={currentStepIndex + 1}
         total={totalSteps}
@@ -84,12 +142,21 @@ export default function FormPreview({ formData }: FormPreviewProps) {
           ))}
         </div>
 
+        {submitMessage && (
+          <div className={styles.submitMessage}>
+            <Text size={3} color={submitMessage.includes('success') ? 'default' : 'secondary'}>
+              {submitMessage}
+            </Text>
+          </div>
+        )}
+
         <FormActions
           currentStepIndex={currentStepIndex}
           totalSteps={totalSteps}
           onPrevious={handlePrevious}
           onNext={handleNext}
           onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
         />
       </div>
     </div>

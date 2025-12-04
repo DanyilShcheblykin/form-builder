@@ -15,6 +15,9 @@ export default function FormBuilder() {
   const [selectedStepId, setSelectedStepId] = useState<string | null>(null)
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null)
   const [showPreview, setShowPreview] = useState(false)
+  const [savedFormId, setSavedFormId] = useState<string | null>(null)
+  const [formName, setFormName] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
 
   const selectedStep = formData.steps.find((step) => step.id === selectedStepId)
 
@@ -114,6 +117,52 @@ export default function FormBuilder() {
     })
   }
 
+  const handleSaveForm = async () => {
+    if (formData.steps.length === 0) {
+      alert('Please add at least one step to save the form')
+      return
+    }
+
+    if (!formName.trim()) {
+      alert('Please enter a form name')
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      const url = savedFormId ? `/api/forms/${savedFormId}` : '/api/forms'
+      const method = savedFormId ? 'PUT' : 'POST'
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formName,
+          form_data: formData,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to save form')
+      }
+
+      const data = await response.json()
+      setSavedFormId(data.data.id)
+      alert('Form saved successfully!')
+    } catch (error) {
+      console.error('Error saving form:', error)
+      alert('Failed to save form. Please try again.')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleFormSaved = (formId: string) => {
+    setSavedFormId(formId)
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -121,17 +170,38 @@ export default function FormBuilder() {
           Form Builder
         </Heading>
         <div className={styles.headerActions}>
+          {!showPreview && (
+            <>
+              <input
+                type="text"
+                placeholder="Form name"
+                value={formName}
+                onChange={(e) => setFormName(e.target.value)}
+                className={styles.formNameInput}
+              />
+              <ButtonFilled onClick={handleSaveForm} disabled={isSaving} isLoading={isSaving}>
+                {savedFormId ? 'Update Form' : 'Save Form'}
+              </ButtonFilled>
+            </>
+          )}
           <ButtonFilled onClick={() => setShowPreview(!showPreview)} color="secondary">
             {showPreview ? 'Edit Form' : 'Preview Form'}
           </ButtonFilled>
-          <ButtonFilled onClick={addStep}>
-            Add Step
-          </ButtonFilled>
+          {!showPreview && (
+            <ButtonFilled onClick={addStep}>
+              Add Step
+            </ButtonFilled>
+          )}
         </div>
       </div>
 
       {showPreview ? (
-        <FormPreview formData={formData} />
+        <FormPreview 
+          formData={formData} 
+          formId={savedFormId || undefined}
+          formName={formName}
+          onFormSaved={handleFormSaved}
+        />
       ) : (
         <div className={styles.content}>
           <div className={styles.sidebar}>

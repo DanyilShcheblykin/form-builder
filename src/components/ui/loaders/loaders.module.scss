@@ -1,0 +1,410 @@
+// Container
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: fit-content;
+  height: fit-content;
+}
+
+.fullScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: var(--color-background);
+}
+
+// Text
+.text {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  text-align: center;
+}
+
+.textSm {
+  font-size: 0.875rem;
+}
+
+.textMd {
+  font-size: 1rem;
+}
+
+.textLg {
+  font-size: 1.125rem;
+}
+
+.textXl {
+  font-size: 1.25rem;
+}
+
+// Spinner
+.spinner {
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  animation: spin 1s linear infinite;
+}
+
+.spinnerSm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.spinnerMd {
+  width: 2rem;
+  height: 2rem;
+}
+
+.spinnerLg {
+  width: 3rem;
+  height: 3rem;
+}
+
+.spinnerXl {
+  width: 4rem;
+  height: 4rem;
+}
+
+.spinnerBlue {
+  border-top-color: var(--color-primary);
+}
+
+.spinnerGreen {
+  border-top-color: var(--color-success);
+}
+
+.spinnerPurple {
+  border-top-color: var(--color-accent);
+}
+
+.spinnerOrange {
+  border-top-color: var(--color-warning);
+}
+
+.spinnerGray {
+  border-top-color: var(--color-text-muted);
+}
+
+// Dots
+.dotsContainer {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.dot {
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.dotSm {
+  width: 0.375rem;
+  height: 0.375rem;
+}
+
+.dotMd {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.dotLg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.dotXl {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dotBlue {
+  background-color: var(--color-primary);
+}
+
+.dotGreen {
+  background-color: var(--color-success);
+}
+
+.dotPurple {
+  background-color: var(--color-accent);
+}
+
+.dotOrange {
+  background-color: var(--color-warning);
+}
+
+.dotGray {
+  background-color: var(--color-text-muted);
+}
+
+// Pulse
+.pulse {
+  border-radius: 50%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.pulseSm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.pulseMd {
+  width: 2rem;
+  height: 2rem;
+}
+
+.pulseLg {
+  width: 3rem;
+  height: 3rem;
+}
+
+.pulseXl {
+  width: 4rem;
+  height: 4rem;
+}
+
+.pulseBlue {
+  background-color: var(--color-primary);
+}
+
+.pulseGreen {
+  background-color: var(--color-success);
+}
+
+.pulsePurple {
+  background-color: var(--color-accent);
+}
+
+.pulseOrange {
+  background-color: var(--color-warning);
+}
+
+.pulseGray {
+  background-color: var(--color-text-muted);
+}
+
+// Bars
+.barsContainer {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.bar {
+  border-radius: 0.125rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.barSm {
+  width: 0.25rem;
+  height: 0.75rem;
+}
+
+.barMd {
+  width: 0.375rem;
+  height: 1rem;
+}
+
+.barLg {
+  width: 0.5rem;
+  height: 1.5rem;
+}
+
+.barXl {
+  width: 0.75rem;
+  height: 2rem;
+}
+
+.barBlue {
+  background-color: var(--color-primary);
+}
+
+.barGreen {
+  background-color: var(--color-success);
+}
+
+.barPurple {
+  background-color: var(--color-accent);
+}
+
+.barOrange {
+  background-color: var(--color-warning);
+}
+
+.barGray {
+  background-color: var(--color-text-muted);
+}
+
+// Ripple
+.rippleContainer {
+  position: relative;
+}
+
+.rippleOuter {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.rippleInner {
+  position: relative;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+}
+
+.rippleSm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.rippleMd {
+  width: 2rem;
+  height: 2rem;
+}
+
+.rippleLg {
+  width: 3rem;
+  height: 3rem;
+}
+
+.rippleXl {
+  width: 4rem;
+  height: 4rem;
+}
+
+// Wave
+.waveContainer {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.waveBar {
+  border-radius: 0.125rem;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.waveBarSm {
+  width: 0.125rem;
+  height: 0.5rem;
+}
+
+.waveBarMd {
+  width: 0.25rem;
+  height: 0.75rem;
+}
+
+.waveBarLg {
+  width: 0.375rem;
+  height: 1.25rem;
+}
+
+.waveBarXl {
+  width: 0.5rem;
+  height: 1.75rem;
+}
+
+.waveBarBlue {
+  background-color: var(--color-primary);
+}
+
+.waveBarGreen {
+  background-color: var(--color-success);
+}
+
+.waveBarPurple {
+  background-color: var(--color-accent);
+}
+
+.waveBarOrange {
+  background-color: var(--color-warning);
+}
+
+.waveBarGray {
+  background-color: var(--color-text-muted);
+}
+
+// Cube
+.cubeContainer {
+  position: relative;
+  transform: rotate(45deg);
+}
+
+.cubeLayer {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.125rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.cubeSm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cubeMd {
+  width: 2rem;
+  height: 2rem;
+}
+
+.cubeLg {
+  width: 3rem;
+  height: 3rem;
+}
+
+.cubeXl {
+  width: 4rem;
+  height: 4rem;
+}
+
+.cubeLayer1 {
+  background-color: var(--color-border);
+}
+
+.cubeLayer2 {
+  background-color: var(--color-border-hover);
+  animation-delay: 0.2s;
+}
+
+.cubeLayer3 {
+  background-color: var(--color-text-muted);
+  animation-delay: 0.4s;
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+

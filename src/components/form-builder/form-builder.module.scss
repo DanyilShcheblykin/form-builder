@@ -14,6 +14,22 @@
 .headerActions {
   display: flex;
   gap: 1rem;
+  align-items: center;
+}
+
+.formNameInput {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-size: 1rem;
+  min-width: 200px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--input-border-active);
+  }
 }
 
 .content {

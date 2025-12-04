@@ -9,6 +9,7 @@ interface FormActionsProps {
   onPrevious: () => void
   onNext: () => void
   onSubmit: () => void
+  isSubmitting?: boolean
 }
 
 export default function FormActions({
@@ -17,20 +18,25 @@ export default function FormActions({
   onPrevious,
   onNext,
   onSubmit,
+  isSubmitting = false,
 }: FormActionsProps) {
   return (
     <div className={styles.formActions}>
       <ButtonFilled
         onClick={onPrevious}
-        disabled={currentStepIndex === 0}
+        disabled={currentStepIndex === 0 || isSubmitting}
         color="secondary"
       >
         Previous
       </ButtonFilled>
       {currentStepIndex < totalSteps - 1 ? (
-        <ButtonFilled onClick={onNext}>Next</ButtonFilled>
+        <ButtonFilled onClick={onNext} disabled={isSubmitting}>
+          Next
+        </ButtonFilled>
       ) : (
-        <ButtonFilled onClick={onSubmit}>Submit</ButtonFilled>
+        <ButtonFilled onClick={onSubmit} disabled={isSubmitting} isLoading={isSubmitting}>
+          Submit
+        </ButtonFilled>
       )}
     </div>
   )

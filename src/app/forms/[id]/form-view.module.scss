@@ -1,0 +1,25 @@
+.formContainer{
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.description {
+  margin-top: 0.5rem;
+}
+
+.backButton {
+  margin-top: 1rem;
+}
+
+
