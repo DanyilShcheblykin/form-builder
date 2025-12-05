@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 import { neon } from '@neondatabase/serverless'
+import { DATABASE_URL } from '@/constants'
 
 export async function GET() {
   try {
-    const DATABASE_URL = process.env.DATABASE_URL
 
     if (!DATABASE_URL) {
       return NextResponse.json(
