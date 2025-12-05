@@ -4,7 +4,7 @@ import { SavedForm } from '@/types/database'
 import { Heading } from '@/components/typography/heading/heading'
 import { Text } from '@/components/typography/text/text'
 import ButtonFilled from '@/components/ui/button/button-filled'
-import styles from '../../forms.module.scss'
+import styles from './form-card-header.module.scss'
 
 interface FormCardHeaderProps {
   form: SavedForm
@@ -21,7 +21,7 @@ export default function FormCardHeader({
 }: FormCardHeaderProps) {
   return (
     <div className={styles.formCardHeader}>
-      <div>
+      <div className={styles.formCardContent}>
         <Heading level={3} size={3}>
           {form.name}
         </Heading>

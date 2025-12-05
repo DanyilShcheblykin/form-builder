@@ -5,7 +5,7 @@ import { SavedForm } from '@/types/database'
 import { Heading } from '@/components/typography/heading/heading'
 import { Text } from '@/components/typography/text/text'
 import ButtonFilled from '@/components/ui/button/button-filled'
-import styles from '../forms.module.scss'
+import styles from './form-card.module.scss'
 import FormCardHeader from './form-card-header/form-card-header'
 import FormCardMeta from './form-card-meta/form-card-meta'
 

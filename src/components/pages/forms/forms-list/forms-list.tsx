@@ -2,7 +2,7 @@
 
 import { SavedForm } from '@/types/database'
 import { Text } from '@/components/typography/text/text'
-import styles from '../forms.module.scss'
+import styles from './forms-list.module.scss'
 import FormCard from '../form-card/form-card'
 
 interface FormsListProps {

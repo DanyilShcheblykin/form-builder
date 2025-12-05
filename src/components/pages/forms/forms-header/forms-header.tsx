@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { Heading } from '@/components/typography/heading/heading'
 import ButtonFilled from '@/components/ui/button/button-filled'
-import styles from '../forms.module.scss'
+import styles from './forms-header.module.scss'
 
 export default function FormsHeader() {
   const router = useRouter()
