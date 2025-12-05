@@ -72,7 +72,7 @@ const ButtonFilled: React.FC<IProps> = (props) => {
       ref={ref}
       {...rest}
     >
-      <span className={classNames(showLoader && styles.hiddenText)}>
+      <span className={classNames(styles.buttonText, showLoader && styles.hiddenText)}>
         {children}
       </span>
 

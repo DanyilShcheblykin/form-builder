@@ -1,0 +1,18 @@
+export const popularIcons = [
+  'FileText',
+  'User',
+  'Mail',
+  'Phone',
+  'MapPin',
+  'Calendar',
+  'CreditCard',
+  'Lock',
+  'CheckCircle',
+  'AlertCircle',
+  'Info',
+  'Settings',
+  'Home',
+  'Building',
+  'Heart',
+  'Star',
+]

@@ -9,12 +9,16 @@ import PreviewField from './preview-field/preview-field'
 import FormActions from './form-actions/form-actions'
 import ButtonFilled from '@/components/ui/button/button-filled'
 import styles from './form-preview.module.scss'
-import { useFormBuilder } from '../../create/form-builder/context/form-builder-context'
+import { useFormBuilder } from '../form-builder/context/form-builder-context'
 import { customToast } from '@/components/shared/custom-toast/custom-toast'
 import { useRouter } from 'next/navigation'
 import apiClient from '@/lib/api/client'
 
-export default function FormPreview(): JSX.Element {
+interface FormPreviewProps {
+  userInfo?: { name: string; email: string }
+}
+
+export default function FormPreview({ userInfo }: FormPreviewProps): JSX.Element {
   const router = useRouter()
   const { formData, savedFormId, formName, setSavedFormId, saveForm, isSaving } = useFormBuilder()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
@@ -49,8 +53,19 @@ export default function FormPreview(): JSX.Element {
   }
 
   const handleSaveForm = async () => {
+    // Check that all steps have fields before saving
+    const stepWithoutFields = formData.steps.find((step) => !step.fields || step.fields.length === 0)
+    if (stepWithoutFields) {
+      customToast('Every step has to have fields', 'error')
+      // Note: We can't setSelectedStepId here because we're in preview mode
+      // The validation in saveForm will handle opening the step
+      return
+    }
+    
     try {
       await saveForm()
+      // Redirect to forms list after saving from preview
+      router.push('/forms')
     } catch (error) {
       console.error('Error saving form:', error)
     }
@@ -79,8 +94,10 @@ export default function FormPreview(): JSX.Element {
         setSavedFormId(currentFormId)
       }
 
-      // Submit form data
+      // Submit form data with user info if available
       await apiClient.post(`/forms/${currentFormId}/submissions`, {
+        name: userInfo?.name || 'Anonymous',
+        email: userInfo?.email || 'anonymous@example.com',
         submission_data: formValues,
       })
 

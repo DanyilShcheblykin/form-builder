@@ -26,6 +26,8 @@ model Form {
 model FormSubmission {
   id             String   @id @default(cuid())
   form_id        String
+  name           String
+  email          String
   submission_data Json
   submitted_at   DateTime @default(now())
   

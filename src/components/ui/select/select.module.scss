@@ -9,6 +9,12 @@
 .labelContent {
   display: flex;
   font-size: var(--label-font-size);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.requiredIndicator {
+  color: var(--input-error-color);
 }
 
 .fakeInput {

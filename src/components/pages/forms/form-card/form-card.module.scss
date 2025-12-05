@@ -1,0 +1,15 @@
+.formCard {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-base);
+
+  &:hover {
+    border-color: var(--color-border-hover);
+    box-shadow: var(--card-shadow);
+  }
+}
+

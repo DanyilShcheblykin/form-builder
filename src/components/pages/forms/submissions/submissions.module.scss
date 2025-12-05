@@ -1,0 +1,26 @@
+.containerBlock {
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.backButton {
+  margin-top: 1rem;
+}
+

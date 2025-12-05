@@ -20,6 +20,10 @@
   font-weight: 500;
 }
 
+.requiredIndicator {
+  color: var(--input-error-color);
+}
+
 .input {
   display: flex;
   width: 100%;

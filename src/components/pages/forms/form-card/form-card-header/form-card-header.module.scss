@@ -1,0 +1,44 @@
+.formCardHeader {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.formCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.formCardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.description {
+  margin-top: 0.5rem;
+}
+
+.deleteButton {
+  background-color: transparent !important;
+  border-color: var(--color-error) !important;
+  color: var(--color-error) !important;
+
+  &:hover {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    border-color: var(--color-error) !important;
+    color: var(--color-error) !important;
+  }
+
+  &:active,
+  &:focus {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    border-color: var(--color-error) !important;
+    color: var(--color-error) !important;
+  }
+}
+
