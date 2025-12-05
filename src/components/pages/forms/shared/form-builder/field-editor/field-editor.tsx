@@ -29,9 +29,7 @@ export default function FieldEditor() {
       </div>
 
       <AddFieldSection />
-
       <FieldsList />
-
       {selectedField && (
         <FieldConfiguration />
       )}

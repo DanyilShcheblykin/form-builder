@@ -60,6 +60,8 @@ export default function FormPreview(): JSX.Element {
     
     try {
       await saveForm()
+      // Redirect to forms list after saving from preview
+      router.push('/forms')
     } catch (error) {
       console.error('Error saving form:', error)
     }

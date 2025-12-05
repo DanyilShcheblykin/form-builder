@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { useRouter } from 'next/navigation'
 import { FormBuilderData, FormStep, FormField } from '@/types/form-builder'
 import { customToast } from '@/components/shared/custom-toast/custom-toast'
 import apiClient from '@/lib/api/client'
@@ -60,6 +61,7 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
     initialFormName,
     initialShowPreview = false,
   } = props
+  const router = useRouter()
   const [formData, setFormData] = useState<FormBuilderData>(initialData || { steps: [] })
   const [selectedStepId, setSelectedStepId] = useState<string | null>(null)
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null)
@@ -241,6 +243,12 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
       setSavedFormId(response.data.data.id)
       customToast('Form saved successfully!', 'success')
 
+      // Redirect to forms list when updating existing form
+      if (!isNewForm) {
+        router.push('/forms')
+        return
+      }
+
       // Clear form data after saving new form from main page (not in preview mode)
       if (clearAfterSave && isNewForm) {
         resetForm()
@@ -252,6 +260,10 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
       setIsSaving(false)
     }
   }
+
+  console.log('formData', formData)
+  console.log('steps', steps)
+
 
   const value: FormBuilderContextType = {
     formData,

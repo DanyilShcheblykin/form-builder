@@ -43,11 +43,12 @@ export default function FormCardMeta({ form }: FormCardMetaProps) {
       <ButtonFilled
         onClick={handleCopyLink}
         color="secondary"
-        className={styles.copyButton}
         title="Copy link"
       >
-        <Copy size={16} />
-        <span>Copy link</span>
+        <div className={styles.copyButton}>
+          <Copy size={16} />
+          <span>Copy link</span>
+        </div>
       </ButtonFilled>
     </div>
 
