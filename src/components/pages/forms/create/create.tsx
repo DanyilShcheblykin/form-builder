@@ -1,6 +1,6 @@
 'use client'
 
-import FormBuilder from './form-builder/form-builder'
+import FormBuilder from '../shared/form-builder/form-builder'
 import { useRouter } from 'next/navigation'
 import ButtonFilled from '@/components/ui/button/button-filled'
 import styles from './create.module.scss'

@@ -13,7 +13,7 @@ export default function FormsHeader() {
       <Heading level={1} size={1}>
         My Forms:
       </Heading>
-      <ButtonFilled onClick={() => router.push('/forms/create')}>
+      <ButtonFilled color="main" onClick={() => router.push('/forms/create')}>
         Create Form
       </ButtonFilled>
     </div>

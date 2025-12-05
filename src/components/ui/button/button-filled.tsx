@@ -65,16 +65,14 @@ const ButtonFilled: React.FC<IProps> = (props) => {
 
   return (
     <ButtonRaw
-      className={classNames(buttonColorClass, styles.button, className)}
+      className={classNames(buttonColorClass, styles.button, className, showLoader && styles.hiddenText)}
       onClick={memoizedClickHandler}
       disabled={isDisabled}
       type={type}
       ref={ref}
       {...rest}
     >
-      <span className={classNames(showLoader && styles.hiddenText)}>
-        {children}
-      </span>
+      {children}
 
       {showLoader && (
         <div className={styles.loaderWrapper}>

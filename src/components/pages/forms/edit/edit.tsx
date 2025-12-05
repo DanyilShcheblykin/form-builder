@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { FormBuilderProvider } from '@/components/pages/forms/create/form-builder/context/form-builder-context'
-import { FormBuilderContent } from '@/components/pages/forms/create/form-builder/form-builder'
+import { FormBuilderProvider } from '@/components/pages/forms/shared/form-builder/context/form-builder-context'
+import { FormBuilderContent } from '@/components/pages/forms/shared/form-builder/form-builder'
 import { SavedForm } from '@/types/database'
 import { FormBuilderData } from '@/types/form-builder'
 import LoadingPage from '@/components/shared/loading-page/loading-page'

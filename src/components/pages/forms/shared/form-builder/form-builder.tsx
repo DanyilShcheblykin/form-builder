@@ -2,7 +2,7 @@
 
 import StepManager from './step-manager/step-manager'
 import FieldEditor from './field-editor/field-editor'
-import FormPreview from '../../shared/form-preview/form-preview'
+import FormPreview from '../form-preview/form-preview'
 import { Heading } from '@/components/typography/heading/heading'
 import { Text } from '@/components/typography/text/text'
 import ButtonFilled from '@/components/ui/button/button-filled'

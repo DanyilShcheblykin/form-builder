@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import FormPreview from '@/components/pages/forms/shared/form-preview/form-preview'
-import { FormBuilderProvider } from '@/components/pages/forms/create/form-builder/context/form-builder-context'
+import { FormBuilderProvider } from '@/components/pages/forms/shared/form-builder/context/form-builder-context'
 import { SavedForm } from '@/types/database'
 import { FormBuilderData } from '@/types/form-builder'
 import { Heading } from '@/components/typography/heading/heading'
