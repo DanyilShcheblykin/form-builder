@@ -120,23 +120,18 @@ export default function PreviewField({ field, value, onChange, disabled = false 
       const selectedOption = value ? selectOptions.find((opt) => opt.value === value) : null
       
       return (
-        <>
-          <Text size={3} bold>
-            {field.label}
-            {field.required && <span className={styles.requiredIndicator}> *</span>}
-          </Text>
-          <Select
-            label={field.label}
-            onChange={(selectedOption: any) => {
-              onChange(selectedOption ? selectedOption.value : null)
-            }}
-            options={selectOptions}
-            value={selectedOption}
-            placeholder="Select an option"
-            isDisabled={disabled}
-            {...({ required: field.required } as any)}
-          />
-        </>
+        <Select
+          key={field.id}
+          label={field.label}
+          onChange={(selectedOption: any) => {
+            onChange(selectedOption ? selectedOption.value : null)
+          }}
+          options={selectOptions}
+          value={selectedOption}
+          placeholder="Select an option"
+          isDisabled={disabled}
+          required={field.required}
+        />
       )
 
     default:

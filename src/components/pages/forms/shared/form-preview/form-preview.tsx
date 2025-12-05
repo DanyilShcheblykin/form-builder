@@ -49,6 +49,15 @@ export default function FormPreview(): JSX.Element {
   }
 
   const handleSaveForm = async () => {
+    // Check that all steps have fields before saving
+    const stepWithoutFields = formData.steps.find((step) => !step.fields || step.fields.length === 0)
+    if (stepWithoutFields) {
+      customToast('Every step has to have fields', 'error')
+      // Note: We can't setSelectedStepId here because we're in preview mode
+      // The validation in saveForm will handle opening the step
+      return
+    }
+    
     try {
       await saveForm()
     } catch (error) {

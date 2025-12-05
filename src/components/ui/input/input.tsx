@@ -16,7 +16,12 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     return (
       <div className={styles.inputBlock}>
         <label className={styles.inputLabel}>
-          {!!label && <span className={styles.labelContent}>{label}</span>}
+          {!!label && (
+            <span className={styles.labelContent}>
+              {label}
+              {props.required && <span className={styles.requiredIndicator}> *</span>}
+            </span>
+          )}
 
           <input
             ref={ref}

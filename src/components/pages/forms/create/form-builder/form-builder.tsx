@@ -9,6 +9,7 @@ import ButtonFilled from '@/components/ui/button/button-filled'
 import styles from './form-builder.module.scss'
 import Input from '@/components/ui/input/input'
 import { FormBuilderProvider, useFormBuilder } from './context/form-builder-context'
+import { customToast } from '@/components/shared/custom-toast/custom-toast'
 
 function FormBuilderContent() {
   const {
@@ -22,7 +23,44 @@ function FormBuilderContent() {
     setFormName,
     addStep,
     saveForm,
+    setSelectedStepId,
   } = useFormBuilder()
+
+  const validateAllStepsHaveFields = (): boolean => {
+    const stepWithoutFields = formData.steps.find((step) => !step.fields || step.fields.length === 0)
+    
+    if (stepWithoutFields) {
+      customToast('Every step has to have fields', 'error')
+      setSelectedStepId(stepWithoutFields.id)
+      return false
+    }
+    
+    return true
+  }
+
+  const handlePreviewToggle = () => {
+    if (!showPreview) {
+      // When switching to preview, check if form name is filled
+      if (!formName || formName.trim() === '') {
+        customToast('Please enter the form name', 'error')
+        return
+      }
+      
+      // Check that all steps have fields
+      if (!validateAllStepsHaveFields()) {
+        return
+      }
+    }
+    setShowPreview(!showPreview)
+  }
+
+  const handleSaveForm = async () => {
+    // Check that all steps have fields before saving
+    if (!validateAllStepsHaveFields()) {
+      return
+    }
+    await saveForm(true)
+  }
 
   return (
     <div className={styles.containerBlock}>
@@ -41,7 +79,7 @@ function FormBuilderContent() {
                 className={styles.formNameInput}
               />
               <ButtonFilled 
-                onClick={() => saveForm(true)} 
+                onClick={handleSaveForm} 
                 disabled={isSaving} 
                 isLoading={isSaving}
               >
@@ -49,7 +87,7 @@ function FormBuilderContent() {
               </ButtonFilled>
             </>
           )}
-          <ButtonFilled onClick={() => setShowPreview(!showPreview)} color="secondary">
+          <ButtonFilled onClick={handlePreviewToggle} color="secondary">
             {showPreview ? 'Back to form' : 'Preview Form'}
           </ButtonFilled>
           {!showPreview && (

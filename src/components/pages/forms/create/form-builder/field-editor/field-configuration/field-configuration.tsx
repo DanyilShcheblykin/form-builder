@@ -50,66 +50,63 @@ export default function FieldConfiguration(): JSX.Element | null {
           field.type === 'select') && (
           <div>
             <Text size={3} className={styles.optionsLabel}>
-              {field.type === 'radio' ? 'Answer Options:' : 'Options (one per line):'}
+              {field.type === 'radio'
+                ? 'Answer Options:'
+                : field.type === 'checkbox'
+                ? 'Checkbox Options:'
+                : 'Select Options:'}
             </Text>
-            {field.type === 'radio' ? (
-              <div className={styles.radioOptionsList}>
-                {field.options?.map((option: string, index: number) => (
-                  <div key={index} className={styles.radioOptionItem}>
-                    <Input
-                      value={option}
-                      onChange={(e) => {
-                        const newOptions = [...(field.options || [])]
-                        newOptions[index] = e.target.value
-                        updateField(selectedStep.id, field.id, {
-                          options: newOptions,
-                        })
-                      }}
-                      placeholder={`Answer ${index + 1}`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newOptions = field.options?.filter((_, i) => i !== index) || []
-                        updateField(selectedStep.id, field.id, {
-                          options: newOptions,
-                        })
-                      }}
-                      className={styles.removeOptionButton}
-                      disabled={(field.options?.length || 0) <= 1}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-                <ButtonFilled
-                  type="button"
-                  onClick={() => {
-                    const newOptions = [...(field.options || []), `Answer ${(field.options?.length || 0) + 1}`]
-                    updateField(selectedStep.id, field.id, {
-                      options: newOptions,
-                    })
-                  }}
-                  color="secondary"
-                  className={styles.addOptionButton}
-                >
-                  + Add Answer
-                </ButtonFilled>
-              </div>
-            ) : (
-              <textarea
-                value={field.options?.join('\n') || ''}
-                onChange={(e) =>
+            <div className={styles.radioOptionsList}>
+              {field.options?.map((option: string, index: number) => (
+                <div key={index} className={styles.radioOptionItem}>
+                  <Input
+                    value={option}
+                    onChange={(e) => {
+                      const newOptions = [...(field.options || [])]
+                      newOptions[index] = e.target.value
+                      updateField(selectedStep.id, field.id, {
+                        options: newOptions,
+                      })
+                    }}
+                    placeholder={
+                      field.type === 'radio'
+                        ? `Answer ${index + 1}`
+                        : `Option ${index + 1}`
+                    }
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newOptions = field.options?.filter((_, i) => i !== index) || []
+                      updateField(selectedStep.id, field.id, {
+                        options: newOptions,
+                      })
+                    }}
+                    className={styles.removeOptionButton}
+                    disabled={(field.options?.length || 0) <= 1}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <ButtonFilled
+                type="button"
+                onClick={() => {
+                  const optionLabel =
+                    field.type === 'radio'
+                      ? `Answer ${(field.options?.length || 0) + 1}`
+                      : `Option ${(field.options?.length || 0) + 1}`
+                  const newOptions = [...(field.options || []), optionLabel]
                   updateField(selectedStep.id, field.id, {
-                    options: e.target.value
-                      .split('\n')
-                      .filter((opt) => opt.trim() !== ''),
+                    options: newOptions,
                   })
-                }
-                className={styles.optionsTextarea}
-                placeholder="Option 1&#10;Option 2&#10;Option 3"
-              />
-            )}
+                }}
+                color="secondary"
+                className={styles.addOptionButton}
+              >
+                {field.type === 'radio' ? '+ Add Answer' : '+ Add Option'}
+              </ButtonFilled>
+            </div>
           </div>
         )}
 

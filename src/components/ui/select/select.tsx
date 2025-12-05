@@ -19,10 +19,11 @@ interface IProps extends ReactSelectProps<Option, IsMulti, Group> {
   label?: string
   noOptionsText?: string
   className?: string
+  required?: boolean
 }
 
 const Select = React.forwardRef<SelectInstance<Option, IsMulti, Group>, IProps>(
-  ({ label, error, noOptionsText, className, ...props }, ref) => {
+  ({ label, error, noOptionsText, className, required, ...props }, ref) => {
     const [isClient, setIsClient] = useState(false)
 
     const customStyles: StylesConfig<Option, IsMulti, Group> = {
@@ -170,7 +171,12 @@ const Select = React.forwardRef<SelectInstance<Option, IsMulti, Group>, IProps>(
 
     return (
       <div className={classNames(styles.selectWrapper, className)}>
-        {!!label && <span className={styles.labelContent}>{label}</span>}
+        {!!label && (
+          <span className={styles.labelContent}>
+            {label}
+            {required && <span className={styles.requiredIndicator}> *</span>}
+          </span>
+        )}
 
         {isClient ? (
           <ReactSelect

@@ -184,6 +184,15 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
       return
     }
 
+    // Check that all steps have fields
+    const stepWithoutFields = formData.steps.find((step) => !step.fields || step.fields.length === 0)
+    if (stepWithoutFields) {
+      customToast('Every step has to have fields', 'error')
+      setSelectedStepId(stepWithoutFields.id)
+      setShowPreview(false)
+      return
+    }
+
     setIsSaving(true)
     try {
       const isNewForm = !savedFormId
