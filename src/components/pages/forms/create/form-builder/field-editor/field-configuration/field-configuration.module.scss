@@ -44,3 +44,47 @@
   cursor: pointer;
 }
 
+.radioOptionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radioOptionItem {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.removeOptionButton {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text);
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    background: var(--color-surface);
+    border-color: var(--color-error);
+    color: var(--color-error);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.addOptionButton {
+  margin-top: 0.5rem;
+}
+

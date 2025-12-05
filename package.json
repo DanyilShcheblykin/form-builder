@@ -18,6 +18,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^0.9.5",
     "@prisma/client": "^5.20.0",
+    "axios": "^1.13.2",
     "classnames": "^2.5.1",
     "lucide": "^0.555.0",
     "lucide-react": "^0.344.0",

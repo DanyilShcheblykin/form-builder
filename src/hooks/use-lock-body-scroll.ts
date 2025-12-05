@@ -6,17 +6,60 @@ let documentListenerAdded = false
 
 const bodies = new Map<
   HTMLElement,
-  { counter: number; initialOverflow: string }
+  { counter: number; initialOverflow: string; initialPaddingRight: string }
 >()
+
+/**
+ * Calculate the width of the scrollbar in the current browser
+ */
+const getScrollbarWidth = (): number => {
+  if (!isBrowser) return 0
+
+  // Create a temporary element to measure scrollbar width
+  const outer = document.createElement('div')
+  outer.style.visibility = 'hidden'
+  outer.style.overflow = 'scroll'
+  ;(outer.style as any).msOverflowStyle = 'scrollbar' // needed for WinJS apps
+  document.body.appendChild(outer)
+
+  // Create inner element
+  const inner = document.createElement('div')
+  outer.appendChild(inner)
+
+  // Calculate difference between outer and inner width
+  const scrollbarWidth = outer.offsetWidth - inner.offsetWidth
+
+  // Remove temporary elements
+  outer.parentNode?.removeChild(outer)
+
+  return scrollbarWidth
+}
 
 const lockBodyScroll = () => {
   const body = document.body
   const bodyInfo = bodies.get(body)
 
   if (!bodyInfo) {
-    bodies.set(body, { counter: 1, initialOverflow: body.style.overflow })
+    // Calculate scrollbar width
+    const scrollbarWidth = getScrollbarWidth()
+    
+    // Store initial values
+    const initialOverflow = body.style.overflow
+    const initialPaddingRight = body.style.paddingRight
+    
+    // Apply lock
     body.style.overflow = 'hidden'
-    body.style.paddingRight = '8px' /* Compensate for scrollbar width */
+    
+    // Only add padding if scrollbar exists and there's content to scroll
+    if (scrollbarWidth > 0 && document.documentElement.scrollHeight > window.innerHeight) {
+      body.style.paddingRight = `${scrollbarWidth}px`
+    }
+
+    bodies.set(body, {
+      counter: 1,
+      initialOverflow,
+      initialPaddingRight,
+    })
 
     if (isIosDevice && !documentListenerAdded) {
       document.addEventListener('touchmove', handleTouchMove, {
@@ -35,9 +78,11 @@ const unlockBodyScroll = () => {
 
   if (bodyInfo) {
     if (bodyInfo.counter === 1) {
-      bodies.delete(body)
+      // Restore initial values
       body.style.overflow = bodyInfo.initialOverflow
-      body.style.paddingRight = '' /* Remove padding compensation */
+      body.style.paddingRight = bodyInfo.initialPaddingRight
+
+      bodies.delete(body)
 
       if (isIosDevice && documentListenerAdded) {
         document.removeEventListener('touchmove', handleTouchMove)

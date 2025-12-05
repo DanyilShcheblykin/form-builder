@@ -11,6 +11,7 @@ import { Text } from '@/components/typography/text/text'
 import ButtonFilled from '@/components/ui/button/button-filled'
 import styles from './view.module.scss'
 import LoadingPage from '@/components/shared/loading-page/loading-page'
+import apiClient from '@/lib/api/client'
 
 export default function FormViewPageComponent() {
   const router = useRouter()
@@ -31,12 +32,8 @@ export default function FormViewPageComponent() {
     setIsLoading(true)
     setError(null)
     try {
-      const response = await fetch(`/api/forms/${formId}`)
-      if (!response.ok) {
-        throw new Error('Failed to fetch form')
-      }
-      const data = await response.json()
-      setForm(data.data)
+      const response = await apiClient.get(`/forms/${formId}`)
+      setForm(response.data.data)
     } catch (err) {
       console.error('Error fetching form:', err)
       setError('Failed to load form')

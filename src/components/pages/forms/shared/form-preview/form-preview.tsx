@@ -11,8 +11,11 @@ import ButtonFilled from '@/components/ui/button/button-filled'
 import styles from './form-preview.module.scss'
 import { useFormBuilder } from '../../create/form-builder/context/form-builder-context'
 import { customToast } from '@/components/shared/custom-toast/custom-toast'
+import { useRouter } from 'next/navigation'
+import apiClient from '@/lib/api/client'
 
 export default function FormPreview(): JSX.Element {
+  const router = useRouter()
   const { formData, savedFormId, formName, setSavedFormId, saveForm, isSaving } = useFormBuilder()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [formValues, setFormValues] = useState<Record<string, any>>({})
@@ -20,7 +23,7 @@ export default function FormPreview(): JSX.Element {
 
   const currentStep = formData.steps[currentStepIndex]
   const totalSteps = formData.steps.length
-  
+
   // If form is not saved yet, it's preview mode - disable fields
   const isPreviewMode = !savedFormId
 
@@ -67,44 +70,28 @@ export default function FormPreview(): JSX.Element {
 
       // If form doesn't have an ID, save it first
       if (!currentFormId) {
-        const saveFormResponse = await fetch('/api/forms', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: formName || `Form ${new Date().toLocaleDateString()}`,
-            form_data: formData,
-          }),
+        const saveFormResponse = await apiClient.post('/forms', {
+          name: formName || `Form ${new Date().toLocaleDateString()}`,
+          form_data: formData,
         })
 
-        if (!saveFormResponse.ok) {
-          throw new Error('Failed to save form')
-        }
-
-        const saveFormData = await saveFormResponse.json()
-        currentFormId = saveFormData.data.id
+        currentFormId = saveFormResponse.data.data.id
         setSavedFormId(currentFormId)
       }
 
       // Submit form data
-      const submitResponse = await fetch(`/api/forms/${currentFormId}/submissions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          submission_data: formValues,
-        }),
+      await apiClient.post(`/forms/${currentFormId}/submissions`, {
+        submission_data: formValues,
       })
-
-      if (!submitResponse.ok) {
-        throw new Error('Failed to submit form')
-      }
 
       customToast('Form submitted successfully!', 'success')
       setFormValues({}) // Clear form values
       setCurrentStepIndex(0) // Reset to first step
+
+      if (!isPreviewMode) {
+        router.push(`/forms`)
+      }
+
     } catch (error) {
       console.error('Error submitting form:', error)
       customToast('Failed to submit form. Please try again.', 'error')

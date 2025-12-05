@@ -10,6 +10,7 @@ import styles from './forms.module.scss'
 import LoadingPage from '@/components/shared/loading-page/loading-page'
 import { customToast } from '@/components/shared/custom-toast/custom-toast'
 import RemoveFormModal from './remove-form-modal/remove-form-modal'
+import apiClient from '@/lib/api/client'
 
 export default function FormsPageComponent() {
   const router = useRouter()
@@ -27,12 +28,8 @@ export default function FormsPageComponent() {
     setIsLoading(true)
     setError(null)
     try {
-      const response = await fetch('/api/forms')
-      if (!response.ok) {
-        throw new Error('Failed to fetch forms')
-      }
-      const data = await response.json()
-      setForms(data.data || [])
+      const response = await apiClient.get('/forms')
+      setForms(response.data.data || [])
     } catch (err) {
       console.error('Error fetching forms:', err)
       setError('Failed to load forms')
@@ -50,14 +47,7 @@ export default function FormsPageComponent() {
     if (!formIdToDelete) return
 
     try {
-      const response = await fetch(`/api/forms/${formIdToDelete}`, {
-        method: 'DELETE',
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to delete form')
-      }
-
+      await apiClient.delete(`/forms/${formIdToDelete}`)
       setForms(forms.filter((form) => form.id !== formIdToDelete))
       setIsDeleteModalOpen(false)
       setFormIdToDelete(null)

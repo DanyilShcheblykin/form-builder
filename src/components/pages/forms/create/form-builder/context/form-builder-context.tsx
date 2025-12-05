@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from 'react'
 import { FormBuilderData, FormStep, FormField } from '@/types/form-builder'
 import { customToast } from '@/components/shared/custom-toast/custom-toast'
+import apiClient from '@/lib/api/client'
 
 interface FormBuilderContextType {
   // State
@@ -96,6 +97,10 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
       type: fieldType,
       label: `New ${fieldType}`,
       required: false,
+      // Add default options for radio, checkbox, and select
+      ...(fieldType === 'radio' || fieldType === 'checkbox' || fieldType === 'select'
+        ? { options: fieldType === 'radio' ? ['Answer 1', 'Answer 2'] : ['Option 1', 'Option 2'] }
+        : {}),
     }
 
     setFormData({
@@ -181,27 +186,20 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
 
     setIsSaving(true)
     try {
-      const url = savedFormId ? `/api/forms/${savedFormId}` : '/api/forms'
-      const method = savedFormId ? 'PUT' : 'POST'
       const isNewForm = !savedFormId
+      const url = savedFormId ? `/forms/${savedFormId}` : '/forms'
+      
+      const response = savedFormId
+        ? await apiClient.put(url, {
+            name: formName,
+            form_data: formData,
+          })
+        : await apiClient.post(url, {
+            name: formName,
+            form_data: formData,
+          })
 
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formName,
-          form_data: formData,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to save form')
-      }
-
-      const data = await response.json()
-      setSavedFormId(data.data.id)
+      setSavedFormId(response.data.data.id)
       customToast('Form saved successfully!', 'success')
 
       // Clear form data after saving new form from main page (not in preview mode)
