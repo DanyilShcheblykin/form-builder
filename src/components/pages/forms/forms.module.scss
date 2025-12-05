@@ -65,11 +65,20 @@
 }
 
 .deleteButton {
-  background-color: var(--input-error-color) !important;
-  border-color: var(--input-error-color) !important;
+  background-color: transparent !important;
+  border-color: var(--color-error) !important;
+  color: var(--color-error) !important;
 
   &:hover {
-    background-color: var(--input-error-color) !important;
-    opacity: 0.9;
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    border-color: var(--color-error) !important;
+    color: var(--color-error) !important;
+  }
+
+  &:active,
+  &:focus {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    border-color: var(--color-error) !important;
+    color: var(--color-error) !important;
   }
 }

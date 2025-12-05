@@ -5,30 +5,12 @@ import ButtonFilled from '@/components/ui/button/button-filled'
 import * as LucideIcons from 'lucide-react'
 import classNames from 'classnames'
 import styles from './icon-selector.module.scss'
+import { popularIcons } from './data'
 
 interface IconSelectorProps {
   currentIcon: string
   onSelectIcon: (icon: string) => void
 }
-
-const popularIcons = [
-  'FileText',
-  'User',
-  'Mail',
-  'Phone',
-  'MapPin',
-  'Calendar',
-  'CreditCard',
-  'Lock',
-  'CheckCircle',
-  'AlertCircle',
-  'Info',
-  'Settings',
-  'Home',
-  'Building',
-  'Heart',
-  'Star',
-]
 
 export default function IconSelector({
   currentIcon,
@@ -64,7 +46,7 @@ export default function IconSelector({
             className={styles.iconSelectorDropdown}
             onClick={(e) => e.stopPropagation()}
           >
-            {popularIcons.map((iconName) => (
+            {popularIcons.map((iconName: string) => (
               <button
                 key={iconName}
                 onClick={() => {

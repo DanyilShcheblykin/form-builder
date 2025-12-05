@@ -5,14 +5,7 @@ import { Text } from '@/components/typography/text/text'
 import ButtonFilled from '@/components/ui/button/button-filled'
 import styles from './add-field-section.module.scss'
 import { useFormBuilder } from '../../context/form-builder-context'
-
-const fieldTypes: { type: FieldType; label: string }[] = [
-  { type: 'input', label: 'Text Input' },
-  { type: 'textarea', label: 'Textarea' },
-  { type: 'checkbox', label: 'Checkbox' },
-  { type: 'radio', label: 'Radio Button' },
-  { type: 'select', label: 'Select Dropdown' },
-]
+import { fieldTypes } from './data'
 
 export default function AddFieldSection(): JSX.Element | null {
   const { selectedStep, addField } = useFormBuilder()

@@ -4,6 +4,13 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 import { FormBuilderData, FormStep, FormField } from '@/types/form-builder'
 import { customToast } from '@/components/shared/custom-toast/custom-toast'
 import apiClient from '@/lib/api/client'
+import {
+  DEFAULT_STEP_ICON,
+  DEFAULT_FIELD_LABEL_PREFIX,
+  DEFAULT_RADIO_OPTIONS,
+  DEFAULT_CHECKBOX_OPTIONS,
+  DEFAULT_SELECT_OPTIONS,
+} from './data'
 
 interface FormBuilderContextType {
   // State
@@ -68,7 +75,7 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
     const newStep: FormStep = {
       id: `step-${Date.now()}`,
       title: `Step ${formData.steps.length + 1}`,
-      icon: 'FileText',
+      icon: DEFAULT_STEP_ICON,
       fields: [],
     }
     setFormData({ steps: [...formData.steps, newStep] })
@@ -92,14 +99,21 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
   }
 
   const addField = (stepId: string, fieldType: FormField['type']) => {
+    const getDefaultOptions = () => {
+      if (fieldType === 'radio') return DEFAULT_RADIO_OPTIONS
+      if (fieldType === 'checkbox') return DEFAULT_CHECKBOX_OPTIONS
+      if (fieldType === 'select') return DEFAULT_SELECT_OPTIONS
+      return undefined
+    }
+
     const newField: FormField = {
       id: `field-${Date.now()}`,
       type: fieldType,
-      label: `New ${fieldType}`,
+      label: `${DEFAULT_FIELD_LABEL_PREFIX} ${fieldType}`,
       required: false,
       // Add default options for radio, checkbox, and select
       ...(fieldType === 'radio' || fieldType === 'checkbox' || fieldType === 'select'
-        ? { options: fieldType === 'radio' ? ['Answer 1', 'Answer 2'] : ['Option 1', 'Option 2'] }
+        ? { options: getDefaultOptions() }
         : {}),
     }
 
