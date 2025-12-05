@@ -38,6 +38,7 @@ export default function FormCardHeader({
         <ButtonFilled onClick={onEditClick} color="secondary">
           Edit
         </ButtonFilled>
+
         <ButtonFilled
           onClick={onDeleteClick}
           color="secondary"
@@ -46,6 +47,7 @@ export default function FormCardHeader({
           Delete
         </ButtonFilled>
       </div>
+      
     </div>
   )
 }

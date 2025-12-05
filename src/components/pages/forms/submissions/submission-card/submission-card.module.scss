@@ -1,0 +1,37 @@
+.submissionCard {
+  background-color: var(--color-surface);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &:hover {
+    border-color: var(--color-border-hover);
+    box-shadow: var(--card-shadow);
+  }
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.email {
+  margin-top: 0.25rem;
+}
+
+.cardMeta {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+

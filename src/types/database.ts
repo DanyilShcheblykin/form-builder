@@ -12,7 +12,8 @@ export interface SavedForm {
 export interface FormSubmission {
   id: string
   form_id: string
+  name: string
+  email: string
   submission_data: Record<string, any>
   submitted_at: string
 }
-

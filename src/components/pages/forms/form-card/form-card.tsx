@@ -23,7 +23,10 @@ export default function FormCard({ form, onDeleteClick }: FormCardProps) {
         onEditClick={() => router.push(`/forms/${form.id}/edit`)}
         onDeleteClick={() => onDeleteClick(form.id)}
       />
-      <FormCardMeta form={form} />
+      <FormCardMeta 
+        form={form} 
+        onSubmissionsClick={() => router.push(`/forms/${form.id}/submissions`)}
+      />
     </div>
   )
 }

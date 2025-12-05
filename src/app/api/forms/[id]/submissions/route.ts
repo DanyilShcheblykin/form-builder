@@ -25,11 +25,13 @@ export async function POST(
     }
 
     // Use validated data (already typed and validated by Zod)
-    const { submission_data } = validation.data!
+    const { name, email, submission_data } = validation.data!
 
     // Create submission using service
     const submission = await submissionService.create({
       form_id: formId,
+      name,
+      email,
       submission_data,
     })
 

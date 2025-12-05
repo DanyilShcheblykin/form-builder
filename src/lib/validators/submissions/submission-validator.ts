@@ -7,6 +7,8 @@ import { ValidationResult } from '../types'
 
 // Submission schema
 export const submissionSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
   submission_data: z.unknown().refine((data: unknown) => data !== undefined && data !== null, {
     message: 'Submission data is required',
   }),

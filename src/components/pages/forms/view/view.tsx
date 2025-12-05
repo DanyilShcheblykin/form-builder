@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import FormPreview from '@/components/pages/forms/shared/form-preview/form-preview'
 import { FormBuilderProvider } from '@/components/pages/forms/shared/form-builder/context/form-builder-context'
+import UserInfoModal from '@/components/pages/forms/shared/user-info-modal/user-info-modal'
 import { SavedForm } from '@/types/database'
 import { FormBuilderData } from '@/types/form-builder'
 import { Heading } from '@/components/typography/heading/heading'
@@ -21,6 +22,8 @@ export default function FormViewPageComponent() {
   const [form, setForm] = useState<SavedForm | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showUserInfoModal, setShowUserInfoModal] = useState(true)
+  const [userInfo, setUserInfo] = useState<{ name: string; email: string } | null>(null)
 
   useEffect(() => {
     if (formId) {
@@ -61,39 +64,50 @@ export default function FormViewPageComponent() {
     )
   }
 
+  const handleUserInfoSubmit = (name: string, email: string) => {
+    setUserInfo({ name, email })
+    setShowUserInfoModal(false)
+  }
+
   return (
     <main className={styles.main}>
-      <div className='container'>
-        <div className={styles.formContainer}>
-          <div className={styles.header}>
-            <div>
-              <Heading level={1} size={1}>
-                {form.name}
-              </Heading>
-              {form.description && (
-                <Text size={3} color="secondary" className={styles.description}>
-                  {form.description}
-                </Text>
-              )}
+      <UserInfoModal
+        isOpen={showUserInfoModal && !userInfo}
+        onClose={() => router.push('/forms')}
+        onSubmit={handleUserInfoSubmit}
+      />
+      
+      {userInfo && form && (
+        <div className='container'>
+          <div className={styles.formContainer}>
+            <div className={styles.header}>
+              <div>
+                <Heading level={1} size={1}>
+                  {form.name}
+                </Heading>
+                {form.description && (
+                  <Text size={3} color="secondary" className={styles.description}>
+                    {form.description}
+                  </Text>
+                )}
+              </div>
+              <ButtonFilled onClick={() => router.push('/forms')} color="secondary">
+                Back to Forms
+              </ButtonFilled>
             </div>
-            <ButtonFilled onClick={() => router.push('/forms')} color="secondary">
-              Back to Forms
-            </ButtonFilled>
+
+            <FormBuilderProvider
+              initialData={form.form_data as FormBuilderData}
+              initialFormId={form.id}
+              initialFormName={form.name}
+              initialShowPreview={true}
+            >
+              <FormPreview userInfo={userInfo} />
+            </FormBuilderProvider>
           </div>
-
-          <FormBuilderProvider
-            initialData={form.form_data as FormBuilderData}
-            initialFormId={form.id}
-            initialFormName={form.name}
-            initialShowPreview={true}
-          >
-            <FormPreview />
-          </FormBuilderProvider>
         </div>
-
-      </div>
+      )}
     </main>
-
   )
 }
 

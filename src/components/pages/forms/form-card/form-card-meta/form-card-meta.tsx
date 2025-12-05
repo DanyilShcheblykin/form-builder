@@ -10,9 +10,10 @@ import { formatDate } from '../../utils/date-utils'
 
 interface FormCardMetaProps {
   form: SavedForm
+  onSubmissionsClick: () => void
 }
 
-export default function FormCardMeta({ form }: FormCardMetaProps) {
+export default function FormCardMeta({ form, onSubmissionsClick }: FormCardMetaProps) {
   const handleCopyLink = async () => {
     const formUrl = `${window.location.origin}/forms/${form.id}`
 
@@ -40,16 +41,22 @@ export default function FormCardMeta({ form }: FormCardMetaProps) {
         )}
 
       </div>
-      <ButtonFilled
-        onClick={handleCopyLink}
-        color="secondary"
-        title="Copy link"
-      >
-        <div className={styles.copyButton}>
-          <Copy size={16} />
-          <span>Copy link</span>
-        </div>
-      </ButtonFilled>
+      <div className={styles.actions}>
+        <ButtonFilled
+          onClick={handleCopyLink}
+          color="secondary"
+          title="Copy link"
+
+        >
+          <div className={styles.copyButton}>
+            <Copy size={16} />
+            <span>Copy link</span>
+          </div>
+        </ButtonFilled>
+        <ButtonFilled onClick={onSubmissionsClick} color="secondary">
+          Submissions
+        </ButtonFilled>
+      </div>
     </div>
 
   )

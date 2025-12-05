@@ -14,7 +14,11 @@ import { customToast } from '@/components/shared/custom-toast/custom-toast'
 import { useRouter } from 'next/navigation'
 import apiClient from '@/lib/api/client'
 
-export default function FormPreview(): JSX.Element {
+interface FormPreviewProps {
+  userInfo?: { name: string; email: string }
+}
+
+export default function FormPreview({ userInfo }: FormPreviewProps): JSX.Element {
   const router = useRouter()
   const { formData, savedFormId, formName, setSavedFormId, saveForm, isSaving } = useFormBuilder()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
@@ -90,8 +94,10 @@ export default function FormPreview(): JSX.Element {
         setSavedFormId(currentFormId)
       }
 
-      // Submit form data
+      // Submit form data with user info if available
       await apiClient.post(`/forms/${currentFormId}/submissions`, {
+        name: userInfo?.name || 'Anonymous',
+        email: userInfo?.email || 'anonymous@example.com',
         submission_data: formValues,
       })
 

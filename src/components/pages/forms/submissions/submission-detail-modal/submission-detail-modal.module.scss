@@ -1,0 +1,74 @@
+.modalContent {
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.userInfo {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: var(--color-surface);
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.infoRow {
+  strong {
+    color: var(--color-text);
+  }
+}
+
+.fieldsSection {
+  margin-top: 2rem;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+}
+
+.fieldsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.fieldItem {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.fieldLabel {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.required {
+  color: var(--input-error-color);
+}
+
+.fieldValue {
+  margin-top: 0.5rem;
+}
+
+.checkboxValues {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.textareaValue {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+

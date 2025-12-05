@@ -6,6 +6,8 @@ import { prisma } from '@/lib/prisma'
 
 export interface CreateSubmissionData {
   form_id: string
+  name: string
+  email: string
   submission_data: any
 }
 
@@ -17,6 +19,8 @@ export const submissionService = {
     return prisma.formSubmission.create({
       data: {
         form_id: data.form_id,
+        name: data.name,
+        email: data.email,
         submission_data: data.submission_data as any,
       },
     })

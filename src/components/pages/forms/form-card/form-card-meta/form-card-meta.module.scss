@@ -15,11 +15,16 @@
   flex: 1;
 }
 
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
 .copyButton {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: auto;
-  align-self: flex-start;
 }
 
