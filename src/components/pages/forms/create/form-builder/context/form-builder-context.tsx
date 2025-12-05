@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { FormBuilderData, FormStep, FormField } from '@/types/form-builder'
 import { customToast } from '@/components/shared/custom-toast/custom-toast'
 import apiClient from '@/lib/api/client'
@@ -70,6 +70,22 @@ export function FormBuilderProvider(props: FormBuilderProviderProps) {
 
   const selectedStep = formData.steps.find((step) => step.id === selectedStepId)
   const steps = formData.steps
+
+  // Update formData when initialData changes (e.g., when editing existing form)
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData)
+    }
+  }, [initialData])
+
+  // Auto-select first step when form data is loaded
+  useEffect(() => {
+    if (formData?.steps && formData.steps.length > 0) {
+      if (!selectedStepId) {
+        setSelectedStepId(formData.steps[0].id)
+      }
+    }
+  }, [formData, selectedStepId])
 
   const addStep = () => {
     const newStep: FormStep = {

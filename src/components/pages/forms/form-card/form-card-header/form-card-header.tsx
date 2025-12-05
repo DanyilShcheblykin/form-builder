@@ -9,12 +9,14 @@ import styles from '../../forms.module.scss'
 interface FormCardHeaderProps {
   form: SavedForm
   onViewClick: () => void
+  onEditClick: () => void
   onDeleteClick: () => void
 }
 
 export default function FormCardHeader({
   form,
   onViewClick,
+  onEditClick,
   onDeleteClick,
 }: FormCardHeaderProps) {
   return (
@@ -32,6 +34,9 @@ export default function FormCardHeader({
       <div className={styles.formCardActions}>
         <ButtonFilled onClick={onViewClick} color="secondary">
           View
+        </ButtonFilled>
+        <ButtonFilled onClick={onEditClick} color="secondary">
+          Edit
         </ButtonFilled>
         <ButtonFilled
           onClick={onDeleteClick}

@@ -15,7 +15,9 @@ export default function CreateFormPageComponent() {
           ← Back to Forms
         </ButtonFilled>
       </div>
-      <FormBuilder />
+      <div className={styles.contentWrapper}>
+        <FormBuilder />
+      </div>
     </main>
   )
 }

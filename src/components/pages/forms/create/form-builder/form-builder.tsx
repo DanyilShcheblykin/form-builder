@@ -125,6 +125,10 @@ function FormBuilderContent() {
   )
 }
 
+// Export FormBuilderContent for use with external FormBuilderProvider
+export { FormBuilderContent }
+
+// Default export with FormBuilderProvider for create page
 export default function FormBuilder() {
   return (
     <FormBuilderProvider>

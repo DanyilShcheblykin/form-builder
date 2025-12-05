@@ -22,6 +22,7 @@ export default function FormCard({ form, onDeleteClick }: FormCardProps) {
       <FormCardHeader
         form={form}
         onViewClick={() => router.push(`/forms/${form.id}`)}
+        onEditClick={() => router.push(`/forms/${form.id}/edit`)}
         onDeleteClick={() => onDeleteClick(form.id)}
       />
       <FormCardMeta form={form} />
